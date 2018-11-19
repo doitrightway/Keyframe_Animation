@@ -3,9 +3,11 @@
 out vec4 frag_color;
 
 uniform sampler2D texture;
-in vec2 tex;
-in vec4 color;
+
 flat in int id;
+in vec4 color;
+in vec2 tex;
+
 void main () 
 {
 	if(id!=0)

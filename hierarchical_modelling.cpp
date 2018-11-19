@@ -77,35 +77,35 @@ void initBuffersGL(void)
 
   // cuboid room(10,10,10,1);
   int shift=scale/2;
-  rectangle rect(scale,0);
+  rectangle rect(scale,1);
 
   front = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
 
   front->change_parameters(-shift,-shift,shift,0,0,0);
 
   back = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
 
-  front->change_parameters(-shift,-shift,-shift,0,0,0);
+  back->change_parameters(-shift,-shift,-shift,0,0,0);
 
   left = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
 
   left->change_parameters(-shift,-shift,-shift,0,-90,0);
 
   right = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
 
   right->change_parameters(shift,-shift,-shift,0,-90,0);
 
   bottom = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all1.bmp",256,256);
 
   bottom->change_parameters(-shift,-shift,-shift,90,0,0);
 
   top = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all1.bmp",256,256);
 
   top->change_parameters(-shift,shift,-shift,90,0,0);
 
@@ -291,7 +291,7 @@ void renderGL(void)
 
   //creating the projection matrix
   if(enable_perspective)
-    projection_matrix = glm::frustum(-5.0, 5.0, -5.0, 5.0, 1.0, 200.0);
+    projection_matrix = glm::frustum(-5.0, 5.0, -5.0, 5.0, 2.0, 40.0);
     //projection_matrix = glm::perspective(glm::radians(90.0),1.0,0.1,5.0);
   else
     projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, -10.0, 10.0);
