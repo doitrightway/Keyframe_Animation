@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
+#include <string>
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "glm/mat4x4.hpp"
@@ -29,6 +30,10 @@ namespace csX75	 {
 
 		GLuint num_vertices;
 		GLuint vao,vbo;
+		std::string tex;
+		int texx,texy;
+
+		uint if_tex;
 
 		// glm::mat4 rotation;
 		// glm::mat4 translation;
@@ -43,9 +48,12 @@ namespace csX75	 {
 		glm::mat4 translation;
 		HNode (HNode*, GLuint, glm::vec4*,int*,  glm::vec4*, std::size_t, std::size_t, std::size_t);
 		HNode (HNode*, GLuint);
+		// HNode(HNode*, GLuint, glm::vec4*, glm::vec4* , 
+		// glm::vec2*, int*, std::size_t, 
+		// std::size_t, std::size_t, std::size_t);
 		HNode(HNode*, GLuint, glm::vec4*, glm::vec4* , 
 		glm::vec2*, int*, std::size_t, 
-		std::size_t, std::size_t, std::size_t);
+		std::size_t, std::size_t, std::size_t,std::string,int,int);
 
 		void add_child(HNode*);
 		void render();
