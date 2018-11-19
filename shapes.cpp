@@ -70,7 +70,7 @@ public:
 
 		for(int i=0;i<8;i++)
 		{
-			col[i]=glm::vec4(0.2,0.2,0.3,1.0);
+			col[i]=glm::vec4(1,0,0,1.0);
 		}
 	}
 

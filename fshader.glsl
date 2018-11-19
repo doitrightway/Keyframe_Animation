@@ -8,7 +8,7 @@ in vec4 color;
 flat in int id;
 void main () 
 {
-	if(id!=0)
+	if(id==1)
 	{
 		frag_color=color;
 	}
