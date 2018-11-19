@@ -74,11 +74,17 @@ void initBuffersGL(void)
 
   center = new csX75::HNode(NULL,0);
 
-  cuboid room(10,10,10,1);
-    
-  myroom = new csX75::HNode(center,36,room.positions,room.colors,room.tex_coords,room.id,36*16,36*16,36*8,36*4);
+  cuboid room(10,10,10,0);
+
+  myroom = new csX75::HNode(center,36,room.positions,room.colors,room.tex_coords,room.id,36*16,36*16,36*8,36*4,"images/all.bmp",512,512);
   myroom->change_parameters(-5,-5,-5,0,0,0);
   curr_node = myroom;
+  
+  cuboid ro(2,2,2,0);
+  troom = new csX75::HNode(center,36,ro.positions,ro.colors,ro.tex_coords,ro.id,36*16,36*16,36*8,36*4,"images/all1.bmp",256,256);
+  troom->change_parameters(-1,-1,-1,0,0,0);
+
+  // curr_node = troom;
 
   // cylinder legs(20,20,2,2,10,skincol);
 
@@ -267,9 +273,9 @@ void renderGL(void)
 
  
   matrixStack.push_back(view_matrix);
-  matrixStack.push_back(myroom->translation);
-  matrixStack.push_back(myroom->rotation);
-  myroom->render();
+  // matrixStack.push_back(myroom->translation);
+  // matrixStack.push_back(myroom->rotation);
+  center->render_tree();
 
   // matrixStack.push_back(view_matrix);
 

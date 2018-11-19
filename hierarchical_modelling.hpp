@@ -50,6 +50,7 @@ int vid;
 std::vector<glm::mat4> matrixStack;
 
 csX75::HNode* myroom;
+csX75::HNode* troom;
 csX75::HNode* curr_node;
 csX75::HNode* center;
 // csX75::HNode* node1_torso;

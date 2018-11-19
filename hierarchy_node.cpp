@@ -1,6 +1,7 @@
 #include "hierarchy_node.hpp"
 #include "texture.hpp"
 #include <iostream>
+#include <string>
 
 extern GLuint vPosition,vColor,texCoord, uModelViewMatrix;
 extern int vid;
@@ -50,7 +51,7 @@ namespace csX75
 			BUFFER_OFFSET(vertex_buffer_size + color_buffer_size) );
 
 		// set parent
-
+		if_tex=1;
 		if(a_parent == NULL){
 			parent = NULL;
 		}
@@ -105,7 +106,7 @@ namespace csX75
 		}
 
 		//initial parameters are set to 0;
-
+		if_tex=1;
 		tx=ty=tz=rx=ry=rz=0;
 
 		update_matrices();
@@ -113,7 +114,7 @@ namespace csX75
 
 	HNode::HNode(HNode* a_parent, GLuint num_v, glm::vec4* a_vertices,glm::vec4* a_colours, 
 		glm::vec2* tex_coord, int* id, std::size_t v_size, 
-		std::size_t col_size, std::size_t tex_size, std::size_t id_size){
+		std::size_t col_size, std::size_t tex_size, std::size_t id_size, std::string texture_file, int tex_x,int tex_y){
 
 		num_vertices = num_v;
 		vertex_buffer_size = v_size;
@@ -155,6 +156,12 @@ namespace csX75
 		glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, 
 			BUFFER_OFFSET(vertex_buffer_size+texture_buffer_size + color_buffer_size) );
 
+		tex=texture_file;
+		// strcpy(tex,texture_file);
+		texx=tex_x;
+		texy=tex_y;
+		// tex=LoadTexture("images/all1.bmp",256,256);
+		if_tex=id[0];
 
 		//initial parameters are set to 0;
 		if(a_parent == NULL){
@@ -169,11 +176,6 @@ namespace csX75
 
 		update_matrices();
 	}
-
-
-
-
-
 
 	void HNode::update_matrices(){
 
@@ -203,8 +205,12 @@ namespace csX75
 	}
 
 	void HNode::render(){
-		GLuint tex=LoadTexture("images/all1.bmp",256,256);
-  		glBindTexture(GL_TEXTURE_2D, tex);
+		
+    	
+  		if(!if_tex){
+  			GLuint temp= LoadTexture(tex.c_str(),texx,texy);
+  			glBindTexture(GL_TEXTURE_2D, temp);
+  		}
 		//matrixStack multiply
 		glm::mat4* ms_mult = multiply_stack(matrixStack);
 
