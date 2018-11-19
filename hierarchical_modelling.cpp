@@ -71,9 +71,12 @@ void initBuffersGL(void)
   // GLuint tex=LoadTexture("images/all1.bmp",256,256);
   // glBindTexture(GL_TEXTURE_2D, tex);
 
-  cuboid room(10,10,10,0);
+
+  center = new csX75::HNode(NULL,0);
+
+  cuboid room(10,10,10,1);
     
-  myroom = new csX75::HNode(36,room.positions,room.colors,room.tex_coords,room.id,36*16,36*16,36*8,36*4);
+  myroom = new csX75::HNode(center,36,room.positions,room.colors,room.tex_coords,room.id,36*16,36*16,36*8,36*4);
   myroom->change_parameters(-5,-5,-5,0,0,0);
   curr_node = myroom;
 

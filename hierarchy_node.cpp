@@ -10,7 +10,8 @@ namespace csX75
 {
 
 	HNode::HNode(HNode* a_parent, GLuint num_v, 
-		glm::vec4* a_vertices, glm::vec4* a_colours, std::size_t v_size, std::size_t c_size){
+		glm::vec4* a_vertices, int* id, glm::vec4* a_colours, 
+		std::size_t v_size, std::size_t c_size, std::size_t id_size){
 
 		num_vertices = num_v;
 		vertex_buffer_size = v_size;
@@ -31,14 +32,22 @@ namespace csX75
 		glBufferData (GL_ARRAY_BUFFER, vertex_buffer_size + color_buffer_size, NULL, GL_STATIC_DRAW);
 		glBufferSubData( GL_ARRAY_BUFFER, 0, vertex_buffer_size, a_vertices );
 		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size, color_buffer_size, a_colours );
+		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+color_buffer_size,id_size,id );
 
 		//setup the vertex array as per the shader
 		glEnableVertexAttribArray( vPosition );
 		glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
+
+		glEnableVertexAttribArray( texCoord );
+  		glVertexAttribPointer( texCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertex_buffer_size) );
+
 		glEnableVertexAttribArray( vColor );
 		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertex_buffer_size));
 
+		glEnableVertexAttribArray( vid );
+		glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, 
+			BUFFER_OFFSET(vertex_buffer_size + color_buffer_size) );
 
 		// set parent
 
@@ -75,9 +84,15 @@ namespace csX75
 		glEnableVertexAttribArray( vPosition );
 		glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
+
+		glEnableVertexAttribArray( texCoord );
+  		glVertexAttribPointer( texCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+
 		glEnableVertexAttribArray( vColor );
 		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
+		glEnableVertexAttribArray( vid );
+		glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
 		// set parent
 
@@ -96,7 +111,7 @@ namespace csX75
 		update_matrices();
 	}
 
-	HNode::HNode(GLuint num_v, glm::vec4* a_vertices,glm::vec4* a_colours, 
+	HNode::HNode(HNode* a_parent, GLuint num_v, glm::vec4* a_vertices,glm::vec4* a_colours, 
 		glm::vec2* tex_coord, int* id, std::size_t v_size, 
 		std::size_t col_size, std::size_t tex_size, std::size_t id_size){
 
@@ -142,6 +157,13 @@ namespace csX75
 
 
 		//initial parameters are set to 0;
+		if(a_parent == NULL){
+			parent = NULL;
+		}
+		else{
+			parent = a_parent;
+			parent->add_child(this);
+		}
 
 		tx=ty=tz=rx=ry=rz=0;
 

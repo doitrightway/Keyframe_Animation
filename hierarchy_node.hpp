@@ -41,10 +41,9 @@ namespace csX75	 {
 	  public:
 	  	glm::mat4 rotation;
 		glm::mat4 translation;
-		HNode (HNode*, GLuint, glm::vec4*,  glm::vec4*, std::size_t, std::size_t);
-		HNode(GLuint, glm::vec4*, glm::vec2*, std::size_t, std::size_t);
+		HNode (HNode*, GLuint, glm::vec4*,int*,  glm::vec4*, std::size_t, std::size_t, std::size_t);
 		HNode (HNode*, GLuint);
-		HNode(GLuint, glm::vec4*, glm::vec4* , 
+		HNode(HNode*, GLuint, glm::vec4*, glm::vec4* , 
 		glm::vec2*, int*, std::size_t, 
 		std::size_t, std::size_t, std::size_t);
 
