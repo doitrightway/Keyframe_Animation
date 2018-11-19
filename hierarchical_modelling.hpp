@@ -1,0 +1,90 @@
+/*
+  A program which opens a window and draws three arms in a hierarchy
+
+  Use the arrow keys and PgUp,PgDn, 
+  keys to make the arms move.
+
+  Use the keys 1,2 and 3 to switch between arms.
+
+  Written by - 
+               Harshavardhan Kode
+*/
+#ifndef _COLORCUBE_HPP_
+#define _COLORCUBE_HPP_
+
+// Defining the ESCAPE Key Code
+#define ESCAPE 27
+// Defining the DELETE Key Code
+#define DELETE 127
+
+#include <vector>
+#include "gl_framework.hpp"
+#include "shader_util.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "hierarchy_node.hpp"
+
+/*// Translation Parameters
+GLfloat xpos=0.0,ypos=0.0,zpos=0.0;
+// Rotation Parameters
+GLfloat xrot=0.0,yrot=0.0,zrot=0.0;*/
+// Camera position and rotation Parameters
+GLfloat c_xpos = 0.0, c_ypos = 0.0, c_zpos = 0.1;
+GLfloat c_up_x = 0.0, c_up_y = 1.0, c_up_z = 0.0;
+GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
+
+//Running variable to toggle culling on/off
+bool enable_culling=true;
+//Running variable to toggle wireframe/solid modelling
+bool solid=true;
+//Enable/Disable perspective view
+bool enable_perspective=false;
+//Shader program attribs
+GLuint vPosition,vColor,texCoord;
+int vid;
+
+// //global matrix stack for hierarchical modelling
+std::vector<glm::mat4> matrixStack;
+
+csX75::HNode* myroom;
+csX75::HNode* curr_node;
+// csX75::HNode* node1_torso;
+// csX75::HNode* node2_neck;
+// csX75::HNode* node3_head;
+// csX75::HNode* node4_leftarmu;
+// csX75::HNode* node5_leftarml;
+// csX75::HNode* node6_rightarmu;
+// csX75::HNode* node7_rightarml;
+// csX75::HNode* node8_leftthigh;
+// csX75::HNode* node9_leftfoot;
+// csX75::HNode* node10_rightthigh;
+// csX75::HNode* node11_rightfoot;
+// csX75::HNode* node12_tummy;
+// csX75::HNode* node13_skirt;
+// csX75::HNode* node14_shoe;
+// csX75::HNode* node15_shoe;
+// csX75::HNode* man1_mtorso;
+// csX75::HNode* man2_mneck;
+// csX75::HNode* man3_mhead;
+// csX75::HNode* man4_leftarmu;
+// csX75::HNode* man5_leftarml;
+// csX75::HNode* man6_rightarmu;
+// csX75::HNode* man7_rightarml;
+// csX75::HNode* man8_leftmthigh;
+// csX75::HNode* man9_leftfoot;
+// csX75::HNode* man10_rightmthigh;
+// csX75::HNode* man11_rightfoot;
+// csX75::HNode* man12_mtummy;
+// csX75::HNode* man13_mskirt;
+// csX75::HNode* man14_shoe;
+// csX75::HNode* man15_shoe;
+// csX75::HNode* box1;
+// csX75::HNode* box2;
+// csX75::HNode* centroid_box;
+
+//-------------------------------------------------------------------------
+
+#endif
