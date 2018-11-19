@@ -305,7 +305,7 @@ public:
 		colors=new glm::vec4[siz];
 		t_coords=new glm::vec2[points];
 		tex_coords=new glm::vec2[siz];
-		this->iden=1 tex_coord[idx]=t_coordsen=; id[idx]=iden;;
+		this->iden=1;
 		this->id=new int[siz];
 		initcoord();
 		gen();
@@ -341,12 +341,12 @@ public:
 
 	void quad(int a, int b, int c, int d)
 	{
-		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coord[idx]=t_coords[a]; id[idx]=iden; idx++;
-		colors[idx] = col[b]; positions[idx] = pos[b]; tex_coord[idx]=t_coords[b]; id[idx]=iden; idx++;
-		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coord[idx]=t_coords[c]; id[idx]=iden; idx++;
-		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coord[idx]=t_coords[a]; id[idx]=iden; idx++;
-		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coord[idx]=t_coords[c]; id[idx]=iden; idx++;
-		colors[idx] = col[d]; positions[idx] = pos[d]; tex_coord[idx]=t_coords[d]; id[idx]=iden; idx++;
+		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
+		colors[idx] = col[b]; positions[idx] = pos[b]; tex_coords[idx]=t_coords[b]; id[idx]=iden; idx++;
+		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
+		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
+		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
+		colors[idx] = col[d]; positions[idx] = pos[d]; tex_coords[idx]=t_coords[d]; id[idx]=iden; idx++;
 	}
 
 	void initcoord(){
@@ -359,7 +359,7 @@ public:
 					t1*b,
 					sqrt(1-t1*t1)*cos(2*3.14*t2)*c,
 					1.0);
-				t_coords[counter]=glm::vec2((float)j/base,(float)i/(t*height))
+				t_coords[counter]=glm::vec2((float)j/base,(float)i/(t*height));
 				if(t!=2 && i==height-1){
 					col[counter]=glm::vec4(0,0,0,1.0);
 				}
