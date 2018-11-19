@@ -18,7 +18,7 @@
 #include <iostream>
 #include <cmath>
 #include "hierarchical_modelling.hpp"
-// #include "texture.hpp"
+#include "texture.hpp"
 
 
 GLuint shaderProgram;
@@ -36,6 +36,7 @@ GLuint vao,vbo;
 glm::mat4 modelview_matrix;
 
 GLuint uModelViewMatrix;
+int scale=10;
 // void createman();
 
 //-----------------------------------------------------------------
@@ -74,11 +75,45 @@ void initBuffersGL(void)
 
   center = new csX75::HNode(NULL,0);
 
-  cuboid room(10,10,10,1);
-    
-  myroom = new csX75::HNode(center,36,room.positions,room.colors,room.tex_coords,room.id,36*16,36*16,36*8,36*4);
-  myroom->change_parameters(-5,-5,-5,0,0,0);
-  curr_node = myroom;
+  // cuboid room(10,10,10,1);
+  int shift=scale/2;
+  rectangle rect(scale,0);
+
+  front = new csX75::HNode(center,6,rect.positions,
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+
+  front->change_parameters(-shift,-shift,shift,0,0,0);
+
+  back = new csX75::HNode(center,6,rect.positions,
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+
+  front->change_parameters(-shift,-shift,-shift,0,0,0);
+
+  left = new csX75::HNode(center,6,rect.positions,
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+
+  left->change_parameters(-shift,-shift,-shift,0,-90,0);
+
+  right = new csX75::HNode(center,6,rect.positions,
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+
+  right->change_parameters(shift,-shift,-shift,0,-90,0);
+
+  bottom = new csX75::HNode(center,6,rect.positions,
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+
+  bottom->change_parameters(-shift,-shift,-shift,90,0,0);
+
+  top = new csX75::HNode(center,6,rect.positions,
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4);
+
+  top->change_parameters(-shift,shift,-shift,90,0,0);
+
+  // myroom = new csX75::HNode(center, 36,room.positions,room.colors,
+  //   room.tex_coords,room.id,36*16,36*16,36*8,36*4);
+  // myroom->change_parameters(-5,-5,-5,0,0,0);
+  // curr_node=myroom;
+  curr_node = center;
 
   // cylinder legs(20,20,2,2,10,skincol);
 
@@ -266,12 +301,14 @@ void renderGL(void)
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
 
  
-  matrixStack.push_back(view_matrix);
-  matrixStack.push_back(myroom->translation);
-  matrixStack.push_back(myroom->rotation);
-  myroom->render();
-
   // matrixStack.push_back(view_matrix);
+  // matrixStack.push_back(myroom->translation);
+  // matrixStack.push_back(myroom->rotation);
+  // myroom->render();
+  // front->render();
+
+  matrixStack.push_back(view_matrix);
+  center->render_tree();
 
   // node1_torso->render_tree();
   // man1_mtorso->render_tree();

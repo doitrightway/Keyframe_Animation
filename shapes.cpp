@@ -4,6 +4,40 @@
 #include <iostream>
 #include <cmath>
 
+
+class rectangle
+{
+	public:
+		glm::vec4* positions;
+		glm::vec4* colors;
+		glm::vec2* tex_coords;
+		int* id;
+		rectangle(int scale, int iden)
+		{
+			positions=new glm::vec4[6];
+			colors= new glm::vec4[6];
+			tex_coords=new glm::vec2[6];
+			id= new int[6];
+			positions[0]=glm::vec4(0.0,0.0,0.0, 1.0);
+			positions[1]=glm::vec4(scale,0.0,0.0, 1.0);
+			positions[2]=glm::vec4(scale,scale,0.0, 1.0);
+			positions[3]=glm::vec4(0.0,0.0,0.0, 1.0);
+			positions[4]=glm::vec4(0.0,scale,0.0, 1.0);
+			positions[5]=glm::vec4(scale,scale,0.0, 1.0);
+			tex_coords[0]=glm::vec2(0.0,0.0);
+			tex_coords[1]=glm::vec2(1.0,0.0);
+			tex_coords[2]=glm::vec2(1.0,1.0);
+			tex_coords[3]=glm::vec2(0.0,0.0);
+			tex_coords[4]=glm::vec2(0.0,1.0);
+			tex_coords[5]=glm::vec2(1.0,1.0);
+			for(int i=0;i<6;i++)
+			{
+				id[i]=iden;
+				colors[i]=glm::vec4(0.2,0.2,0.3,1.0);
+			}
+		}
+};
+
 class cuboid
 {
 public:
