@@ -37,7 +37,7 @@ glm::mat4 modelview_matrix;
 
 GLuint uModelViewMatrix;
 int scale=10;
-void createman(float);
+void createman(float,float);
 
 //-----------------------------------------------------------------
 
@@ -82,12 +82,12 @@ void initBuffersGL(void)
   rectangle rect(scale,0);
 
   front = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/walldoor.bmp",1300,752);
 
   front->change_parameters(-shift,-shift,shift,0,0,0);
 
   back = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/wallwin2.bmp",1156,1006);
 
   back->change_parameters(-shift,-shift,-shift,0,0,0);
 
@@ -174,13 +174,13 @@ void initBuffersGL(void)
   box2->change_parameters(4.0*scalebox,0.0,0.0,0.0,0.0,180.0);
 
 
-  int body_sc=0.5;
+  float body_sc=0.2*scalebox;
   cylinder torso(10,20,1.05*body_sc,1.2*body_sc,2.3*body_sc,yellow);
   // //note that the buffers are initialized in the respective constructors
  
   node1_torso = new csX75::HNode(box1,torso.siz,torso.positions,torso.colors,torso.id,
   	torso.retsiz(),torso.retsiz(),torso.retsiz()/4);
-  node1_torso->change_parameters(3.7*scalebox,0*scalebox,-1.0*scalebox,0.0,-180.0,-180.0);
+  node1_torso->change_parameters(1*scalebox,0.65*scalebox,2.0*scalebox,0.0,-180.0,-180.0);
 
   cylinder neck(10,20,0.4*body_sc,0.3*body_sc,0.7*body_sc,skincol);
 
@@ -253,14 +253,14 @@ void initBuffersGL(void)
   	shoe.id,shoe.retsiz(),shoe.retsiz(),shoe.retsiz()/4);
   node15_shoe->change_parameters(0.0*body_sc,(2.5+0.1)*body_sc,-0.23*body_sc,-90.0,0.0,180.0);
 
-  createman(1);
-  // createman(body_sc);
+  // createman(0.8);
+  createman(body_sc,scalebox);
 
   // curr_node = node1_torso;
 
 }
 
-void createman(float body_sc)
+void createman(float body_sc,float scalebox)
 {
 	glm::vec4 skincol=glm::vec4(255.0/255,205.0/255,148.0/255,1);
 	glm::vec4 red=glm::vec4(1,0.05,0.05,1);
@@ -276,7 +276,7 @@ void createman(float body_sc)
  
   man1_mtorso = new csX75::HNode(box1,mtorso.siz,mtorso.positions,mtorso.colors,
   	mtorso.id,mtorso.retsiz(),mtorso.retsiz(),mtorso.retsiz()/4);
-  man1_mtorso->change_parameters(3.7*body_sc,0*body_sc,-1.0*body_sc,0.0,-180.0,-180.0);
+  man1_mtorso->change_parameters(3*scalebox,0.65*scalebox,2.0*scalebox,0.0,-180.0,-180.0);
 
   cylinder mneck(10,20,0.4*body_sc,0.3*body_sc,0.7*body_sc,skincol);
 
