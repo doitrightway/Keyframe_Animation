@@ -12,7 +12,7 @@ class rectangle
 		glm::vec4* colors;
 		glm::vec2* tex_coords;
 		int* id;
-		rectangle(int scale, int iden)
+		rectangle(int scale, int iden, glm::vec4 col)
 		{
 			positions=new glm::vec4[6];
 			colors= new glm::vec4[6];
@@ -33,7 +33,7 @@ class rectangle
 			for(int i=0;i<6;i++)
 			{
 				id[i]=iden;
-				colors[i]=glm::vec4(0.2,0.2,0.3,1.0);
+				colors[i]=col;
 			}
 		}
 		~rectangle(){
@@ -110,7 +110,7 @@ public:
 
 		for(int i=0;i<8;i++)
 		{
-			col[i]=glm::vec4(1,0,0,1.0);
+			col[i]=glm::vec4(0,1,0,1.0);
 		}
 	}
 
@@ -334,11 +334,11 @@ public:
 		initcoord();
 		gen();
 	}
-	ellipsoid(int spherebase,int sphereheight,float at,float bt,float ct,int r)
+	ellipsoid(int spherebase,int sphereheight,float at,float bt,float ct,int r,int iden,glm::vec4 col_temp=glm::vec4(1,0,0,1))
 	{
 		idx=0;
 		t=r;
-		mycol=glm::vec4(1,0,0,1);
+		mycol=col_temp;
 		base=spherebase;
 		height=sphereheight;
 		a=at;
@@ -352,7 +352,7 @@ public:
 		colors=new glm::vec4[siz];
 		t_coords=new glm::vec2[points];
 		tex_coords=new glm::vec2[siz];
-		this->iden=0;
+		this->iden=iden;
 		this->id=new int[siz];
 		initcoord();
 		gen();
@@ -458,7 +458,7 @@ public:
 		tex_coords=new glm::vec2[siz];
 		t_coords=new glm::vec2[points];
 		this->id=new int[siz];
-		iden=1;
+		this->iden=1;
 		initcoord();
 		pos[base*(height+1)]=glm::vec4(0.0,0,0,1);
 		this->col[base*(height+1)]=mycol;

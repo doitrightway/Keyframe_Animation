@@ -4,7 +4,7 @@
 #include <string>
 
 extern GLuint vPosition,vColor,texCoord, uModelViewMatrix;
-extern int vid;
+extern GLuint vid;
 extern std::vector<glm::mat4> matrixStack;
 
 namespace csX75
@@ -16,7 +16,10 @@ namespace csX75
 
 		num_vertices = num_v;
 		vertex_buffer_size = v_size;
+		vertex_buffer_size = num_v*16;
 		color_buffer_size = c_size;
+		color_buffer_size = num_v*16;
+		id_size = num_v*4;
 		// initialize vao and vbo of the object;
 
 
@@ -28,13 +31,16 @@ namespace csX75
 		//bind them
 		glBindVertexArray (vao);
 		glBindBuffer (GL_ARRAY_BUFFER, vbo);
-
+		glm::vec2 *tex_coord=new glm::vec2[color_buffer_size/2];
 		
-		glBufferData (GL_ARRAY_BUFFER, vertex_buffer_size + color_buffer_size, NULL, GL_STATIC_DRAW);
+		glBufferData (GL_ARRAY_BUFFER, vertex_buffer_size +color_buffer_size/2+color_buffer_size, NULL, GL_STATIC_DRAW);
 		glBufferSubData( GL_ARRAY_BUFFER, 0, vertex_buffer_size, a_vertices );
-		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size, color_buffer_size, a_colours );
-		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+color_buffer_size,id_size,id );
-
+		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size, color_buffer_size/2, tex_coord );
+		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+color_buffer_size/2, color_buffer_size, a_colours );
+		// glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+color_buffer_size*3/(float)2,id_size,id );
+		
+		std::cout<<a_colours[0][0]<<" ";
+		delete[] tex_coord;
 		//setup the vertex array as per the shader
 		glEnableVertexAttribArray( vPosition );
 		glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
@@ -44,11 +50,11 @@ namespace csX75
   		glVertexAttribPointer( texCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertex_buffer_size) );
 
 		glEnableVertexAttribArray( vColor );
-		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertex_buffer_size));
+		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(vertex_buffer_size+color_buffer_size/2));
 
-		glEnableVertexAttribArray( vid );
-		glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, 
-			BUFFER_OFFSET(vertex_buffer_size + color_buffer_size) );
+		// glEnableVertexAttribArray( vid );
+		// glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, 
+		// 	BUFFER_OFFSET(vertex_buffer_size + color_buffer_size+color_buffer_size/2) );
 
 		// set parent
 		if_tex=1;
@@ -92,8 +98,8 @@ namespace csX75
 		glEnableVertexAttribArray( vColor );
 		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
-		glEnableVertexAttribArray( vid );
-		glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+		// glEnableVertexAttribArray( vid );
+		// glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
 		// set parent
 
@@ -133,13 +139,13 @@ namespace csX75
 		glBindBuffer (GL_ARRAY_BUFFER, vbo);
 
 		
-		glBufferData (GL_ARRAY_BUFFER, vertex_buffer_size + texture_buffer_size+color_buffer_size+id_size, 
+		glBufferData (GL_ARRAY_BUFFER, vertex_buffer_size + texture_buffer_size+color_buffer_size, 
 			NULL, GL_STATIC_DRAW);
 		glBufferSubData( GL_ARRAY_BUFFER, 0, vertex_buffer_size, a_vertices );
 		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size, texture_buffer_size, tex_coord );
 		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+texture_buffer_size, color_buffer_size,a_colours);
-		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size + texture_buffer_size+color_buffer_size,
-			id_size,id);
+		// glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size + texture_buffer_size+color_buffer_size,
+		// 	id_size,id);
 
 		//setup the vertex array as per the shader
 		glEnableVertexAttribArray( vPosition );
@@ -152,9 +158,9 @@ namespace csX75
 		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, 
 			BUFFER_OFFSET(vertex_buffer_size+texture_buffer_size) );
 
-		glEnableVertexAttribArray( vid );
-		glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, 
-			BUFFER_OFFSET(vertex_buffer_size+texture_buffer_size + color_buffer_size) );
+		// glEnableVertexAttribArray( vid );
+		// glVertexAttribPointer( vid, 1 , GL_FLOAT, GL_FALSE, 0, 
+		// 	BUFFER_OFFSET(vertex_buffer_size+texture_buffer_size + color_buffer_size) );
 
 		tex=texture_file;
 		// strcpy(tex,texture_file);
@@ -215,6 +221,7 @@ namespace csX75
 		glm::mat4* ms_mult = multiply_stack(matrixStack);
 
 		glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(*ms_mult));
+		glUniform1i(vid,if_tex);
 		glBindVertexArray (vao);
 		glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 

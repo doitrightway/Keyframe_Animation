@@ -58,7 +58,7 @@ void initBuffersGL(void)
   // getting the attributes from the shader program
   vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
   vColor = glGetAttribLocation( shaderProgram, "vColor" ); 
-  vid= glGetAttribLocation( shaderProgram, "vid" ); 
+  vid= glGetUniformLocation( shaderProgram, "vid" ); 
   uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
   texCoord = glGetAttribLocation( shaderProgram, "texCoord" ); 
 
@@ -79,7 +79,7 @@ void initBuffersGL(void)
 
   // cuboid room(10,10,10,1);
   int shift=scale/2;
-  rectangle rect(scale,0);
+  rectangle rect(scale,0,glm::vec4(1,0,1,1));
 
   front = new csX75::HNode(center,6,rect.positions,
     rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/walldoor.bmp",1300,752);
@@ -119,7 +119,7 @@ void initBuffersGL(void)
 
   int table_sc=1;
 
-  cuboid tab_top(2*table_sc,0.2*table_sc,4*table_sc,0);
+  cuboid tab_top(2*table_sc,0.2*table_sc,4*table_sc,1);
   table_top= new csX75::HNode(center,36,tab_top.positions,tab_top.colors,
   	tab_top.tex_coords,tab_top.id,tab_top.retsiz(),tab_top.retsiz(),tab_top.retsiz()/2,
   	tab_top.retsiz()/4,"images/all1.bmp",256,256);
