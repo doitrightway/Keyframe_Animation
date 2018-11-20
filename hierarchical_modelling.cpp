@@ -180,7 +180,7 @@ void initBuffersGL(void)
  
   node1_torso = new csX75::HNode(box1,torso.siz,torso.positions,torso.colors,torso.id,
   	torso.retsiz(),torso.retsiz(),torso.retsiz()/4);
-  node1_torso->change_parameters(3.7*body_sc,0*body_sc,-1.0*body_sc,0.0,-180.0,-180.0);
+  node1_torso->change_parameters(3.7*scalebox,0*scalebox,-1.0*scalebox,0.0,-180.0,-180.0);
 
   cylinder neck(10,20,0.4*body_sc,0.3*body_sc,0.7*body_sc,skincol);
 
