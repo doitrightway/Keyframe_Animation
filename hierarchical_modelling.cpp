@@ -28,13 +28,11 @@ glm::mat4 projection_matrix;
 glm::mat4 c_rotation_matrix;
 glm::mat4 lookat_matrix;
 
-glm::mat4 model_matrix;
 glm::mat4 view_matrix;
 GLuint vao,vbo;
 
-
-glm::mat4 modelview_matrix;
-
+GLuint normalMatrix;
+GLuint viewMatrix;
 GLuint uModelViewMatrix;
 int scale=10;
 void createman(float,float);
@@ -58,9 +56,14 @@ void initBuffersGL(void)
   // getting the attributes from the shader program
   vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
   vColor = glGetAttribLocation( shaderProgram, "vColor" ); 
+  vNormal = glGetAttribLocation( shaderProgram, "vNormal" );
+  texCoord = glGetAttribLocation( shaderProgram, "texCoord" ); 
+
   vid= glGetUniformLocation( shaderProgram, "vid" ); 
   uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
-  texCoord = glGetAttribLocation( shaderProgram, "texCoord" ); 
+  viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
+  normalMatrix = glGetUniformLocation( shaderProgram, "normalMatrix");
+
 
   glm::vec4 skincol=glm::vec4(255.0/255,205.0/255,148.0/255,1);
   glm::vec4 red=glm::vec4(1,0.05,0.05,1);
@@ -75,85 +78,70 @@ void initBuffersGL(void)
 
   center = new csX75::HNode(NULL,0);
 
+  curr_node = center;
+
   cuboid room(10,10,10,1);
 
-  // cuboid room(10,10,10,1);
   int shift=scale/2;
   rectangle rect(scale,0,glm::vec4(1,0,1,1));
 
   front = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/walldoor.bmp",1300,752);
+    rect.colors,rect.tex_coords,rect.normals,"images/walldoor.bmp",1300,752);
 
   front->change_parameters(-shift,-shift,shift,0,0,0);
 
   back = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/wallwin2.bmp",1156,1006);
+    rect.colors,rect.tex_coords,rect.normals,"images/wallwin2.bmp",1156,1006);
 
   back->change_parameters(-shift,-shift,-shift,0,0,0);
 
   left = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/all.bmp",256,256);
 
   left->change_parameters(-shift,-shift,-shift,0,-90,0);
 
   right = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/all.bmp",256,256);
 
   right->change_parameters(shift,-shift,-shift,0,-90,0);
 
   bottom = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all1.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/all1.bmp",256,256);
 
   bottom->change_parameters(-shift,-shift,-shift,90,0,0);
 
   top = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.id,6*16,6*16,6*8,6*4,"images/all1.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/all1.bmp",256,256);
 
   top->change_parameters(-shift,shift,-shift,90,0,0);
 
-  // myroom = new csX75::HNode(center, 36,room.positions,room.colors,
-  //   room.tex_coords,room.id,36*16,36*16,36*8,36*4);
-  // myroom->change_parameters(-5,-5,-5,0,0,0);
-  // curr_node=myroom;
-  curr_node = center;
 
   int table_sc=1;
 
   cuboid tab_top(2*table_sc,0.2*table_sc,4*table_sc,1);
   table_top= new csX75::HNode(center,36,tab_top.positions,tab_top.colors,
-  	tab_top.tex_coords,tab_top.id,tab_top.retsiz(),tab_top.retsiz(),tab_top.retsiz()/2,
-  	tab_top.retsiz()/4,"images/all1.bmp",256,256);
+  	tab_top.tex_coords,tab_top.normals,"images/all1.bmp",256,256);
   table_top->change_parameters(0*table_sc,-2*table_sc,0*table_sc,0,0,0);
 
   cylinder tab_legs(20,20,0.3*table_sc,0.2*table_sc,3.2*table_sc,0);
   
   tab_leg1=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.id,tab_legs.retsiz(),tab_legs.retsiz(),tab_legs.retsiz()/2,
-  	tab_legs.retsiz()/4,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
   tab_leg1->change_parameters(0,-3*table_sc,0,-0,0,0);
 
   tab_leg2=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.id,tab_legs.retsiz(),tab_legs.retsiz(),tab_legs.retsiz()/2,
-  	tab_legs.retsiz()/4,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
   tab_leg2->change_parameters(2*table_sc,-3*table_sc,0*table_sc,0,0,0);
 
   tab_leg3=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.id,tab_legs.retsiz(),tab_legs.retsiz(),tab_legs.retsiz()/2,
-  	tab_legs.retsiz()/4,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
   tab_leg3->change_parameters(0*table_sc,-3*table_sc,4*table_sc,0,0,0);
 
   tab_leg4=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.id,tab_legs.retsiz(),tab_legs.retsiz(),tab_legs.retsiz()/2,
-  	tab_legs.retsiz()/4,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
   tab_leg4->change_parameters(2*table_sc,-3*table_sc,4*table_sc,0,0,0);
 
 
-  // cylinder legs(20,20,2,2,10,skincol);
-
-
-
-  // glEnableVertexAttribArray( vColor );
-  // glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(36*16));
 
   glm::vec4 arr[5]={skincol,red,blue,yellow,white};
 
@@ -163,13 +151,10 @@ void initBuffersGL(void)
   openbox box(4*scalebox,2*scalebox,4*scalebox,arr);
   openbox lid(4*scalebox,0.3*scalebox,4*scalebox,arr);
 
-  // centroid_box = new csX75::HNode(table_top,0);
-  // centroid_box->change_parameters(0.6*scalebox,0.2*table_sc+5*scalebox,0,0,0,0);
   box1 = new csX75::HNode(table_top,box.siz,box.positions,box.colors
-  	,box.id, box.retsiz(),box.retsiz(), box.retsiz()/4);
+  	,box.normals);
   box1->change_parameters(-2.0*scalebox,2.0*scalebox+0.2*table_sc,2.0*scalebox,0.0,180.0,180.0);
-  box2 = new csX75::HNode(box1,lid.siz,lid.positions,lid.colors,lid.id,lid.retsiz(),
-  	lid.retsiz(),lid.retsiz()/4);
+  box2 = new csX75::HNode(box1,lid.siz,lid.positions,lid.colors,lid.normals);
 
   box2->change_parameters(4.0*scalebox,0.0,0.0,0.0,0.0,180.0);
 
@@ -178,20 +163,19 @@ void initBuffersGL(void)
   cylinder torso(10,20,1.05*body_sc,1.2*body_sc,2.3*body_sc,yellow);
   // //note that the buffers are initialized in the respective constructors
  
-  node1_torso = new csX75::HNode(box1,torso.siz,torso.positions,torso.colors,torso.id,
-  	torso.retsiz(),torso.retsiz(),torso.retsiz()/4);
+  node1_torso = new csX75::HNode(box1,torso.siz,torso.positions,torso.colors,torso.normals);
   node1_torso->change_parameters(1*scalebox,0.65*scalebox,2.0*scalebox,0.0,-180.0,-180.0);
 
   cylinder neck(10,20,0.4*body_sc,0.3*body_sc,0.7*body_sc,skincol);
 
   node2_neck = new csX75::HNode(node1_torso,neck.siz,neck.positions,neck.colors,
-  	neck.id,neck.retsiz(),neck.retsiz(),neck.retsiz()/4);
+  	neck.normals);
   node2_neck->change_parameters(0.0,2.3*body_sc,0.0,0.0,0.0,0.0);
   
   ellipsoid head(10,20,1*body_sc,1*body_sc,1*body_sc,skincol);
 
   node3_head = new csX75::HNode(node2_neck,head.siz,head.positions,head.colors,
-  	head.id,head.retsiz(),head.retsiz(),head.retsiz()/4);
+  	head.normals);
   node3_head->change_parameters(0.0*body_sc,1.4*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   cylinder limb(10,20,0.25*body_sc,0.2*body_sc,2*body_sc,skincol);
@@ -201,56 +185,56 @@ void initBuffersGL(void)
   cylinder tummy(10,20,1.05*body_sc,1.1*body_sc,0.7*body_sc,skincol);
 
   node4_leftarmu = new csX75::HNode(node1_torso,limb.siz,limb.positions,limb.colors,
-  	limb.id,limb.retsiz(),limb.retsiz(),limb.retsiz()/4);
+  	limb.normals);
   node4_leftarmu->change_parameters((1.1-0.1*0.25/(2*2.3))*body_sc,
   	(2.3-0.25/2)*body_sc,0.0*body_sc,0.0,0.0,-90.0);
 
   node5_leftarml = new csX75::HNode(node4_leftarmu,limblower.siz,limblower.positions,limblower.colors,
-  	limblower.id,limblower.retsiz(),limblower.retsiz(),limblower.retsiz()/4);
+  	limblower.normals);
   node5_leftarml->change_parameters(0.0*body_sc,2.0*body_sc,0.0*body_sc,0.0,0.0,90.0);
 
   node6_rightarmu = new csX75::HNode(node1_torso,limb.siz,limb.positions,limb.colors,
-  	limb.id,limb.retsiz(),limb.retsiz(),limb.retsiz()/4);
+  	limb.normals);
   node6_rightarmu->change_parameters((-1.1+0.1*0.25/(2*2.3))*body_sc,(2.3-0.25/2)*body_sc,0.0*body_sc,0.0,0.0,90.0);
 
   node7_rightarml = new csX75::HNode(node6_rightarmu,limblower.siz,limblower.positions,limblower.colors,
-  	limblower.id,limblower.retsiz(),limblower.retsiz(),limblower.retsiz()/4);
+  	limblower.normals);
   node7_rightarml->change_parameters(0.0*body_sc,2.0*body_sc,0.0*body_sc,0.0,0.0,90.0);
 
   node12_tummy = new csX75::HNode(node1_torso,tummy.siz,tummy.positions,tummy.colors,
-  	tummy.id,tummy.retsiz(),tummy.retsiz(),tummy.retsiz()/4);
+  	tummy.normals);
   node12_tummy->change_parameters(0.0*body_sc,0.0*body_sc,0.0*body_sc,0.0,0.0,180.0);
 
   node8_leftthigh = new csX75::HNode(node12_tummy,thigh.siz,thigh.positions,thigh.colors,
-  	thigh.id,thigh.retsiz(),thigh.retsiz(),thigh.retsiz()/4);
+  	thigh.normals);
   node8_leftthigh->change_parameters((-1.1+0.35/2)*body_sc,0.7*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   node9_leftfoot = new csX75::HNode(node8_leftthigh,leglower.siz,leglower.positions,leglower.colors,
-  	leglower.id,leglower.retsiz(),leglower.retsiz(),leglower.retsiz()/4);
+  	leglower.normals);
   node9_leftfoot->change_parameters(0.0*body_sc,2.5*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   node10_rightthigh = new csX75::HNode(node12_tummy,thigh.siz,thigh.positions,thigh.colors,
-  	thigh.id,thigh.retsiz(),thigh.retsiz(),thigh.retsiz()/4);
+  	thigh.normals);
   node10_rightthigh->change_parameters((1.1-0.35/2)*body_sc,0.7*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   node11_rightfoot = new csX75::HNode(node10_rightthigh,leglower.siz,leglower.positions,leglower.colors,
-  	leglower.id,leglower.retsiz(),leglower.retsiz(),leglower.retsiz()/4);
+  	leglower.normals);
   node11_rightfoot->change_parameters(0.0*body_sc,2.5*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   ellipsoid skirt(10,20,3*body_sc,4.8*body_sc,3*body_sc,blue,1);
 
   node13_skirt = new csX75::HNode(node12_tummy,skirt.siz,skirt.positions,skirt.colors,
-  	skirt.id,skirt.retsiz(),skirt.retsiz(),skirt.retsiz()/4);
+  	skirt.normals);
   node13_skirt->change_parameters(0.0*body_sc,5.2*body_sc,0.0*body_sc,0.0,0.0,180.0);
 
   glm::vec4 brown=glm::vec4(139.0/255,69.0/255,19.0/255,1);
   cylinder shoe=cylinder(10,20,0.3*body_sc,0.2*body_sc,1*body_sc,brown);
   node14_shoe=new csX75::HNode(node9_leftfoot,shoe.siz,shoe.positions,shoe.colors,
-  	shoe.id,shoe.retsiz(),shoe.retsiz(),shoe.retsiz()/4);
+  	shoe.normals);
   node14_shoe->change_parameters(0.0*body_sc,(2.5+0.1)*body_sc,-0.23*body_sc,-90.0,0.0,180.0);
 
   node15_shoe=new csX75::HNode(node11_rightfoot,shoe.siz,shoe.positions,shoe.colors,
-  	shoe.id,shoe.retsiz(),shoe.retsiz(),shoe.retsiz()/4);
+  	shoe.normals);
   node15_shoe->change_parameters(0.0*body_sc,(2.5+0.1)*body_sc,-0.23*body_sc,-90.0,0.0,180.0);
 
   // createman(0.8);
@@ -269,25 +253,25 @@ void createman(float body_sc,float scalebox)
 	glm::vec4 brown=glm::vec4(139.0/255,69.0/255,19.0/255,1);
   	
 
-  	cylinder shoe=cylinder(10,20,0.3*body_sc,0.2*body_sc,1*body_sc,brown);
+  cylinder shoe=cylinder(10,20,0.3*body_sc,0.2*body_sc,1*body_sc,brown);
 
 	cylinder mtorso(10,20,1.05*body_sc,1.2*body_sc,2.3*body_sc,yellow);
   //note that the buffers are initialized in the respective constructors
  
   man1_mtorso = new csX75::HNode(box1,mtorso.siz,mtorso.positions,mtorso.colors,
-  	mtorso.id,mtorso.retsiz(),mtorso.retsiz(),mtorso.retsiz()/4);
+  	mtorso.normals);
   man1_mtorso->change_parameters(3*scalebox,0.65*scalebox,2.0*scalebox,0.0,-180.0,-180.0);
 
   cylinder mneck(10,20,0.4*body_sc,0.3*body_sc,0.7*body_sc,skincol);
 
   man2_mneck = new csX75::HNode(man1_mtorso,mneck.siz,mneck.positions,mneck.colors,
-  	mneck.id,mneck.retsiz(),mneck.retsiz(),mneck.retsiz()/4);
+  	mneck.normals);
   man2_mneck->change_parameters(0.0*body_sc,2.3*body_sc,0.0*body_sc,0.0,0.0,0.0);
   
   ellipsoid mhead(10,20,1*body_sc,1*body_sc,1*body_sc,skincol);
 
   man3_mhead = new csX75::HNode(man2_mneck,mhead.siz,mhead.positions,mhead.colors,
-  	mhead.id,mhead.retsiz(),mhead.retsiz(),mhead.retsiz()/4);
+  	mhead.normals);
   man3_mhead->change_parameters(0.0*body_sc,1.4*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   cylinder mlimb(10,20,0.25*body_sc,0.2*body_sc,2*body_sc,skincol);
@@ -297,47 +281,47 @@ void createman(float body_sc,float scalebox)
   cylinder mtummy(10,20,1.05*body_sc,1.1*body_sc,0.7*body_sc,yellow);
 
   man4_leftarmu = new csX75::HNode(man1_mtorso,mlimb.siz,mlimb.positions,mlimb.colors,
-  	mlimb.id,mlimb.retsiz(),mlimb.retsiz(),mlimb.retsiz()/4);
+  	mlimb.normals);
   man4_leftarmu->change_parameters((1.1-0.1*0.25/(2*2.3))*body_sc,(2.3-0.25/2)*body_sc,0.0*body_sc,0.0,0.0,-90.0);
 
   man5_leftarml = new csX75::HNode(man4_leftarmu,mlimblower.siz,mlimblower.positions,mlimblower.colors,
-  	mlimblower.id,mlimblower.retsiz(),mlimblower.retsiz(),mlimblower.retsiz()/4);
+  	mlimblower.normals);
   man5_leftarml->change_parameters(0.0*body_sc,2.0*body_sc,0.0*body_sc,0.0,0.0,-90.0);
 
   man6_rightarmu = new csX75::HNode(man1_mtorso,mlimb.siz,mlimb.positions,mlimb.colors,
-  	mlimb.id,mlimb.retsiz(),mlimb.retsiz(),mlimb.retsiz()/4);
+  	mlimb.normals);
   man6_rightarmu->change_parameters((-1.1+0.1*0.25/(2*2.3))*body_sc,(2.3-0.25/2)*body_sc,0.0*body_sc,0.0,0.0,90.0);
 
   man7_rightarml = new csX75::HNode(man6_rightarmu,mlimblower.siz,mlimblower.positions,mlimblower.colors,
-  	mlimblower.id,mlimblower.retsiz(),mlimblower.retsiz(),mlimblower.retsiz()/4);
+  	mlimblower.normals);
   man7_rightarml->change_parameters(0.0*body_sc,2.0*body_sc,0.0*body_sc,0.0,0.0,-90.0);
 
   man12_mtummy = new csX75::HNode(man1_mtorso,mtummy.siz,mtummy.positions,mtummy.colors,
-  	mtummy.id,mtummy.retsiz(),mtummy.retsiz(),mtummy.retsiz()/4);
+  	mtummy.normals);
   man12_mtummy->change_parameters(0.0*body_sc,0.0*body_sc,0.0*body_sc,0.0,0.0,180.0);
 
   man8_leftmthigh = new csX75::HNode(man12_mtummy,mthigh.siz,mthigh.positions,mthigh.colors,
-  	mthigh.id,mthigh.retsiz(),mthigh.retsiz(),mthigh.retsiz()/4);
+  	mthigh.normals);
   man8_leftmthigh->change_parameters((-1.1+0.35/2)*body_sc,0.7*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   man9_leftfoot = new csX75::HNode(man8_leftmthigh,mleglower.siz,mleglower.positions,mleglower.colors,
-  	mleglower.id,mleglower.retsiz(),mleglower.retsiz(),mleglower.retsiz()/4);
+  	mleglower.normals);
   man9_leftfoot->change_parameters(0.0*body_sc,2.5*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   man10_rightmthigh = new csX75::HNode(man12_mtummy,mthigh.siz,mthigh.positions,mthigh.colors,
-  	mthigh.id,mthigh.retsiz(),mthigh.retsiz(),mthigh.retsiz()/4);
+  	mthigh.normals);
   man10_rightmthigh->change_parameters((1.1-0.35/2)*body_sc,0.7*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   man11_rightfoot = new csX75::HNode(man10_rightmthigh,mleglower.siz,mleglower.positions,mleglower.colors,
-  	mleglower.id,mleglower.retsiz(),mleglower.retsiz(),mleglower.retsiz()/4);
+  	mleglower.normals);
   man11_rightfoot->change_parameters(0.0*body_sc,2.5*body_sc,0.0*body_sc,0.0,0.0,0.0);
 
   man14_shoe=new csX75::HNode(man9_leftfoot,shoe.siz,shoe.positions,shoe.colors,
-  	shoe.id,shoe.retsiz(),shoe.retsiz(),shoe.retsiz()/4);
+  	shoe.normals);
   man14_shoe->change_parameters(0.0*body_sc,(2.5+0.1)*body_sc,-0.23*body_sc,-90.0,0.0,180.0);
 
   man15_shoe=new csX75::HNode(man11_rightfoot,shoe.siz,shoe.positions,shoe.colors,
-  	shoe.id,shoe.retsiz(),shoe.retsiz(),shoe.retsiz()/4);
+  	shoe.normals);
   man15_shoe->change_parameters(0.0*body_sc,(2.5+0.1)*body_sc,-0.23*body_sc,-90.0,0.0,180.0);
 
 }
@@ -369,21 +353,11 @@ void renderGL(void)
 
   view_matrix = projection_matrix*lookat_matrix;
 
+  glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
-
- 
-  // matrixStack.push_back(view_matrix);
-  // matrixStack.push_back(myroom->translation);
-  // matrixStack.push_back(myroom->rotation);
-  // myroom->render();
-  // front->render();
 
   matrixStack.push_back(view_matrix);
   center->render_tree();
-
-  // node1_torso->render_tree();
-  // man1_mtorso->render_tree();
-  // centroid_box->render_tree();
 
 }
 

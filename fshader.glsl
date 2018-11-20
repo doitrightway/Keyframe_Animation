@@ -14,11 +14,8 @@ void main ()
 	{
 		frag_color=color;
 	}
-	else if(id[0]==0)
+	else
     {
     	frag_color = texture2D(texture, tex);
-    }
-    else{
-    	frag_color=vec4(1,0,0,1);
     }
 }

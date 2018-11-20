@@ -43,7 +43,7 @@ bool solid=true;
 //Enable/Disable perspective view
 bool enable_perspective=false;
 //Shader program attribs
-GLuint vPosition,vColor,texCoord;
+GLuint vPosition,vColor,texCoord, vNormal;
 GLuint vid;
 
 // //global matrix stack for hierarchical modelling
