@@ -36,6 +36,12 @@ class rectangle
 				colors[i]=glm::vec4(0.2,0.2,0.3,1.0);
 			}
 		}
+		~rectangle(){
+			delete[] positions;
+			delete[] colors;
+			delete[] tex_coords;
+			delete[] id;
+		}
 };
 
 class cuboid
@@ -82,7 +88,7 @@ public:
 	 	colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[0]; id[idx]= iden; idx++;
 	  	colors[idx] = col[b]; positions[idx] = pos[b]; tex_coords[idx]=t_coords[1]; id[idx]= iden; idx++;
 	  	colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[2]; id[idx]= iden; idx++;
-	  	colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[0]; id[idx]= iden; idx++;
+	  	colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[1]; id[idx]= iden; idx++;
 	  	colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[2]; id[idx]= iden; idx++;
 	  	colors[idx] = col[d]; positions[idx] = pos[d]; tex_coords[idx]=t_coords[3]; id[idx]= iden; idx++;
 	}
@@ -116,6 +122,15 @@ public:
 		quad(0,1,5,4);
 		quad(3,2,6,7);
 		quad(4,5,6,7);
+	}
+	~cuboid(){
+		delete[] id;
+		delete[] t_coords;
+		delete[] tex_coords;
+		delete[] col;
+		delete[] positions;
+		delete[] pos;
+		delete[] colors;
 	}
 
 };
@@ -190,7 +205,7 @@ public:
 	 	colors[idx] = col; positions[idx] = pos[a]; tex_coords[idx]=t_coords[0]; id[idx]= iden; idx++;
 	  	colors[idx] = col; positions[idx] = pos[b]; tex_coords[idx]=t_coords[1]; id[idx]= iden; idx++;
 	  	colors[idx] = col; positions[idx] = pos[c]; tex_coords[idx]=t_coords[2]; id[idx]= iden; idx++;
-	  	colors[idx] = col; positions[idx] = pos[a]; tex_coords[idx]=t_coords[0]; id[idx]= iden; idx++;
+	  	colors[idx] = col; positions[idx] = pos[a]; tex_coords[idx]=t_coords[1]; id[idx]= iden; idx++;
 	  	colors[idx] = col; positions[idx] = pos[c]; tex_coords[idx]=t_coords[2]; id[idx]= iden; idx++;
 	  	colors[idx] = col; positions[idx] = pos[d]; tex_coords[idx]=t_coords[3]; id[idx]= iden; idx++;
 	}
@@ -219,6 +234,15 @@ public:
 		quad(0,1,5,4,mycol[3]);
 		quad(3,2,6,7,mycol[4]);
 	}
+	~openbox(){
+		delete[] id;
+		delete[] t_coords;
+		delete[] tex_coords;
+		delete[] pos;
+		delete[] positions;
+		delete[] colors;
+	}
+
 
 };
 
@@ -384,6 +408,15 @@ public:
 			}
 		}
 	}
+	~ellipsoid(){
+		delete[] id;
+		delete[] t_coords;
+		delete[] tex_coords;
+		delete[] pos;
+		delete[] positions;
+		delete[] colors;
+		delete[] col;
+	}
 
 };
 
@@ -513,6 +546,15 @@ public:
 			int t=height*base-1;
 			quad(t+j,t+(j+1)%base,t+(j+2)%base,base*(height+1)+1);
 		}
+	}
+	~cylinder(){
+		delete[] id;
+		delete[] t_coords;
+		delete[] tex_coords;
+		delete[] pos;
+		delete[] positions;
+		delete[] colors;
+		delete[] col;
 	}
 
 };

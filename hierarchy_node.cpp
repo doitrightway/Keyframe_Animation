@@ -11,7 +11,7 @@ namespace csX75
 {
 
 	HNode::HNode(HNode* a_parent, GLuint num_v, 
-		glm::vec4* a_vertices, int* id, glm::vec4* a_colours, 
+		glm::vec4* a_vertices, glm::vec4* a_colours,int* id, 
 		std::size_t v_size, std::size_t c_size, std::size_t id_size){
 
 		num_vertices = num_v;

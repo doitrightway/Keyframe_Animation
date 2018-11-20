@@ -12,7 +12,7 @@ void main ()
 {
 	if(id==1)
 	{
-		frag_color=color;
+		frag_color=vec4(1.0,0.5,0.0,1.0);
 	}
 	else	
     {
