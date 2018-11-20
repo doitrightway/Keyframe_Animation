@@ -39,7 +39,7 @@ namespace csX75
 		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+color_buffer_size/2, color_buffer_size, a_colours );
 		// glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+color_buffer_size*3/(float)2,id_size,id );
 		
-		std::cout<<a_colours[0][0]<<" ";
+		// std::cout<<a_colours[0][0]<<" ";
 		delete[] tex_coord;
 		//setup the vertex array as per the shader
 		glEnableVertexAttribArray( vPosition );

@@ -2,7 +2,7 @@
 
 in vec4 vPosition;
 in vec2 texCoord;
-in vec4 vcolor;
+in vec4 vColor;
 
 uniform bool vid;
 
@@ -14,7 +14,7 @@ uniform mat4 uModelViewMatrix;
 
 void main (void) 
 {
-  color= vcolor;
+  color= vColor;
   gl_Position = uModelViewMatrix * vPosition;
   tex = texCoord;
   if(!vid){

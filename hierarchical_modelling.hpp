@@ -98,6 +98,9 @@ csX75::HNode* box1;
 csX75::HNode* box2;
 // csX75::HNode* centroid_box;
 
+csX75::HNode* display_points[100];
+int number=0;
+glm::vec3 control_points[100];
 //-------------------------------------------------------------------------
 
 #endif

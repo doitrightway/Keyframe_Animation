@@ -32,8 +32,8 @@ glm::mat4 model_matrix;
 glm::mat4 view_matrix;
 GLuint vao,vbo;
 
+glm::mat3 ModelViewMatrix;
 
-glm::mat4 modelview_matrix;
 
 GLuint uModelViewMatrix;
 int scale=10;
@@ -119,7 +119,7 @@ void initBuffersGL(void)
 
   int table_sc=1;
 
-  cuboid tab_top(2*table_sc,0.2*table_sc,4*table_sc,1);
+  cuboid tab_top(2*table_sc,0.2*table_sc,4*table_sc,0);
   table_top= new csX75::HNode(center,36,tab_top.positions,tab_top.colors,
   	tab_top.tex_coords,tab_top.id,tab_top.retsiz(),tab_top.retsiz(),tab_top.retsiz()/2,
   	tab_top.retsiz()/4,"images/all1.bmp",256,256);
@@ -369,6 +369,8 @@ void renderGL(void)
 
   view_matrix = projection_matrix*lookat_matrix;
 
+  ModelViewMatrix = (glm::inverse(glm::mat3(view_matrix)));
+
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
 
  
@@ -438,6 +440,8 @@ int main(int argc, char** argv)
   glfwSetKeyCallback(window, csX75::key_callback);
   //Framebuffer resize callback
   glfwSetFramebufferSizeCallback(window, csX75::framebuffer_size_callback);
+
+  glfwSetMouseButtonCallback(window, csX75::mouse_button_callback);
 
   // Ensure we can capture the escape key being pressed below
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
