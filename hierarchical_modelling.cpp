@@ -37,14 +37,18 @@ GLuint normalMatrix;
 GLuint viewMatrix;
 GLuint uModelViewMatrix;
 
+int filenumber=0;
+
 bool mylight1;
 bool mylight2;
 
 void createman(float,float);
 glm::vec3 get_Bezier(double);
 void change_state(double);
+void capture_frame(unsigned int);
 
 //-----------------------------------------------------------------
+
 
 void initBuffersGL(void)
 {
@@ -429,6 +433,26 @@ void createman(float body_sc,float scalebox)
 
 }
 
+void capture_frame(unsigned int framenum)
+{
+	char filename[200];
+	sprintf(filename,"frames/frame_%04d.tga",framenum);
+  	const int numberOfPixels = SCREEN_WIDTH * SCREEN_HEIGHT * 3;
+    unsigned char pixels[numberOfPixels];
+
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadBuffer(GL_FRONT);
+    glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
+
+    FILE *outputFile = fopen(filename, "w");
+    short header[] = {0, 2, 0, 0, 0, 0, (short) SCREEN_WIDTH, (short) SCREEN_HEIGHT, 24};
+
+    fwrite(&header, sizeof(header), 1, outputFile);
+    fwrite(pixels, numberOfPixels, 1, outputFile);
+    fclose(outputFile);
+}
+
+
 void renderGL(void)
 {
   glEnable(GL_DEPTH_TEST);
@@ -454,49 +478,51 @@ void renderGL(void)
   	number=0;
   }
   else if(start==2 && counter<1){
-  	long tim=glfwGetTime();
-  	if(tim-last_time>fps_time){
+  	double tim=glfwGetTime();
+  	if(tim-last_time>fps_cam_time){
 	  	counter+=delta_t;
-	  	// c_xrot=0;
-	  	// c_yrot=0;
-	  	// c_zrot=0;
 	  	cam_pos=get_Bezier(counter);
 	  	c_xpos=cam_pos[0];
 	  	c_ypos=cam_pos[1];
 	  	c_zpos=cam_pos[2];
-	  	
 	  	last_time=tim;
 	  }
 	  nor=glm::vec3(c_box)-cam_pos;
   }
   if(start==3){
   	start=4;
+  	filenumber=0;
   	key_file.open("keyframes.txt",std::ios::in | std::ios::binary);
   	last_time=glfwGetTime();
   	if(key_file.read((char*)&prev_state,sizeof(prev_state))){
   		if(key_file.read((char*)&fut_state,sizeof(fut_state))){
-  			// std::cout<<"helo";
   			counter=1;
   			change_state(counter);
+	        if(capture_frames_bool){
+	        	capture_frame(filenumber);
+	        	filenumber++;
+	        }
   			counter++;
   		}
   		else{
-  			// std::cout<<"helllo";
   			start=0;
   			key_file.close();
   		}
   	}
   	else{
-  		// std::cout<<"heloooooo";
   		start=0;
   		key_file.close();
   	}
   }
   else if(start==4){
-  	long tim=glfwGetTime();
+  	double tim=glfwGetTime();
   	if(tim-last_time>fps_time){
   		if(counter<num_frames+1){
   			change_state(counter);
+  			if(capture_frames_bool){
+    	    	capture_frame(filenumber);
+        		filenumber++;
+        	}
   			last_time=tim;
   			counter++;
   		}
@@ -505,11 +531,16 @@ void renderGL(void)
 	  		if(key_file.read((char*)&fut_state,sizeof(fut_state))){
 	  			counter=1;
  	 			change_state(counter);
+	  			if(capture_frames_bool){
+          			capture_frame(filenumber);
+          			filenumber++;
+          		}
 	  			counter++;
 	  			last_time=tim;
 	  		}
 	  		else{
 	  			key_file.close();
+          		filenumber=0;
 	  			counter=0;
 	  			start=0;
 	  		}
@@ -533,7 +564,7 @@ void renderGL(void)
     projection_matrix = glm::frustum(-5.0, 5.0, -5.0, 5.0, 2.0, 40.0);
     //projection_matrix = glm::perspective(glm::radians(90.0),1.0,0.1,5.0);
   else
-    projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, 0.0, 20.0);
+    projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, 0.0, 40.0);
 
   view_matrix = projection_matrix*lookat_matrix;
 
@@ -574,15 +605,15 @@ void change_state(double counter){
   	man2_mneck->set_rotation(a.man.neck);
   	man5_leftarml->set_rotation(a.man.leftlowerarm);
   	man7_rightarml->set_rotation(a.man.rightlowerarm);
-  	man9_leftfoot->set_rotation(a.man.leftlowerleg);
-  	man11_rightfoot->set_rotation(a.man.rightlowerleg);
+  	man8_leftmthigh->set_rotation(a.man.leftlowerleg);
+  	man10_rightmthigh->set_rotation(a.man.rightlowerleg);
 
   	node1_torso->set_rotation(a.woman.torso);
   	node2_neck->set_rotation(a.woman.neck);
   	node5_leftarml->set_rotation(a.woman.leftlowerarm);
   	node7_rightarml->set_rotation(a.woman.rightlowerarm);
-  	node9_leftfoot->set_rotation(a.woman.leftlowerleg);
-  	node11_rightfoot->set_rotation(a.woman.rightlowerleg);
+  	node8_leftthigh->set_rotation(a.woman.leftlowerleg);
+  	node10_rightthigh->set_rotation(a.woman.rightlowerleg);
 
   	box2->set_rotation(a.box_lid);
 }
@@ -607,6 +638,11 @@ glm::vec3 get_Bezier(double x){
 
 int main(int argc, char** argv)
 {
+	if(argc==2){
+		if(atoi(argv[1])==1){
+			capture_frames_bool=1;
+		}
+	}
   //! The pointer to the GLFW window
   GLFWwindow* window;
 

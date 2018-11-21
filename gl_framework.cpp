@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-extern GLfloat c_xrot,c_yrot,c_zrot;
+extern GLfloat c_xrot,c_yrot,c_zrot, c_xpos, c_ypos, c_zpos;
 extern bool enable_perspective;
 extern csX75::HNode* center, *curr_node;
 extern csX75::HNode* box1,* box2,*node1_torso, *node2_neck, *node3_head,
@@ -76,8 +76,8 @@ namespace csX75
             // std::cout<<xpos<<","<<ypos<<" ";
     		// glReadPixels(xpos, 512-1-ypos, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zpos);
             // std::cout<<xpos<<","<<ypos<<","<<zpos<<" ";
-            glm::vec4 tresult= glm::vec4((float)xpos/512*10-5,(float)(512-1-ypos)/512*10-5,
-              (float)2,1)*ModelViewMatrix;
+            glm::vec4 tresult= ModelViewMatrix*glm::vec4((float)xpos/512*10-5,(float)(512-1-ypos)/512*10-5,
+              -(float)2,1);
             glm::vec3 result = glm::vec3(tresult[0]/tresult[3],tresult[1]/tresult[3],tresult[2]/tresult[3]);
             control_points[number]=result;
             ellipsoid sp(10,10,0.06,0.06,0.06,glm::vec4(0.9,0.3,0.4,1));
@@ -182,24 +182,6 @@ namespace csX75
     else if (key == GLFW_KEY_PAGE_DOWN && (degree=='a' || degree=='z')){
       curr_node->dec_rz();
     }
-    else if (key == GLFW_KEY_LEFT){
-      curr_node->dec_ry();
-    }
-    else if (key == GLFW_KEY_RIGHT){
-      curr_node->inc_ry();
-    }
-    else if (key == GLFW_KEY_UP){
-      curr_node->dec_rx();
-    }
-    else if (key == GLFW_KEY_DOWN){
-      curr_node->inc_rx();
-    }
-    else if (key == GLFW_KEY_PAGE_UP){
-      curr_node->inc_rz();
-    }
-    else if (key == GLFW_KEY_PAGE_DOWN){
-      curr_node->dec_rz();
-    }
     else if (key == GLFW_KEY_T){
       person=1-person;
       if(person==1){
@@ -230,6 +212,25 @@ namespace csX75
     else if (key == GLFW_KEY_E){
       c_zrot += 1.0;   
     }
+
+    else if (key == GLFW_KEY_H){
+      c_ypos -= 0.1;
+    }
+    else if (key == GLFW_KEY_K){
+      c_ypos += 0.1;
+    }
+    else if (key == GLFW_KEY_U){
+      c_xpos -= 0.1;
+    }
+    else if (key == GLFW_KEY_J){
+      c_xpos += 0.1;        
+    }
+    else if (key == GLFW_KEY_Y){
+      c_zpos -= 0.1;
+    }
+    else if (key == GLFW_KEY_I){
+      c_zpos += 0.1;   
+    }
     else if (key == GLFW_KEY_O && action == GLFW_PRESS && number>0 && start==0){
     	start=1;
     }
@@ -254,14 +255,15 @@ namespace csX75
   	man2_mneck->get_rotation(a->man.neck);
   	man5_leftarml->get_rotation(a->man.leftlowerarm);
   	man7_rightarml->get_rotation(a->man.rightlowerarm);
-  	man9_leftfoot->get_rotation(a->man.leftlowerleg);
-  	man11_rightfoot->get_rotation(a->man.rightlowerleg);
+  	man8_leftmthigh->get_rotation(a->man.leftlowerleg);
+  	man10_rightmthigh->get_rotation(a->man.rightlowerleg);
 
   	node1_torso->get_rotation(a->woman.torso);
   	node2_neck->get_rotation(a->woman.neck);
   	node5_leftarml->get_rotation(a->woman.leftlowerarm);
   	node7_rightarml->get_rotation(a->woman.rightlowerarm);
-  	node9_leftfoot->get_rotation(a->woman.leftlowerleg);
+  	node8_leftthigh->get_rotation(a->woman.leftlowerleg);
+  	node10_rightthigh->get_rotation(a->woman.rightlowerleg);
 
   	box2->get_rotation(a->box_lid);
 
@@ -269,12 +271,6 @@ namespace csX75
   	f.open("keyframes.txt",std::ios::app | std::ios::binary);
   	f.write((char*)a,sizeof(*a));
   	f.close();
-  	// std::ifstream f1;
-  	// f1.open("keyframes.txt",std::ios::in | std::ios::binary);
-  	// std::cout<<a->man.torso[0]<<" "<<a->light1<<" ";
-  	// f1.read((char*)a,sizeof(*a));
-  	// std::cout<<a->man.torso[0]<<" "<<a->light1<<" ";
-  	// f1.close();
   	delete a;
   }
 

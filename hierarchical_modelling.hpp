@@ -34,14 +34,14 @@ GLfloat xpos=0.0,ypos=0.0,zpos=0.0;
 // Rotation Parameters
 GLfloat xrot=0.0,yrot=0.0,zrot=0.0;*/
 // Camera position and rotation Parameters
-GLfloat c_xpos = 0, c_ypos = 0, c_zpos = 2.0;
+GLfloat c_xpos = 0, c_ypos = 0, c_zpos = 5.0;
 GLfloat c_up_x = 0.0, c_up_y = 1.0, c_up_z = 0.0;
 GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
 
 // Coordinates of box
-const glm::vec4 c_box=glm::vec4(4,4,4,1);
-const glm::vec4 c_box_look=glm::vec4(0,0,2,1);
-const glm::vec4 c_door=glm::vec4(-4,-4,-4,1);
+const glm::vec4 c_box=glm::vec4(0,0,0,1);
+const glm::vec4 c_box_look=glm::vec4(-2,3,0,1);
+const glm::vec4 c_door=glm::vec4(-8,-8,-8,1);
 
 //Running variable to toggle culling on/off
 bool enable_culling=true;
@@ -127,12 +127,17 @@ int number=0,start=0;
 double counter=0;
 double delta_t=0.04;
 glm::vec3 control_points[100];
-long last_time=0;
-long fps_time=0.0003;
+double last_time=0;
+double fps_time=0.007;
+double fps_cam_time = 0.001;
 std::ifstream key_file;
 glm::vec3 cam_pos;
 csX75::state prev_state, fut_state;
 int num_frames=5;
+int SCREEN_WIDTH= 512;
+int SCREEN_HEIGHT= 512;
+
+bool capture_frames_bool=0;
 
 //-------------------------------------------------------------------------
 
