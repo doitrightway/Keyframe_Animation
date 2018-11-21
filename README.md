@@ -30,6 +30,7 @@ make
 | F2 | Table lamp (On/Off) |
 | M | Play animation |
 | O | Camera animation on bezier curve |
+| B | Draw Bezier curve |
 | V | Recording keyframes |
 | P | Change perspective |
 | L | Open lid of box |
@@ -46,7 +47,7 @@ make
 
 ## Notes:
 
-- When program is started, press F1 and F2 to switch the lights ON.
+- When program is started, press F1 and F2 to toggle the lights.
 - In the fshader, Phong Shading has been used.
 - The file shapes.cpp contains classes used to define various parts of the objects drawn.
 - Most of the variables defined for nodes are self-explanatory.
