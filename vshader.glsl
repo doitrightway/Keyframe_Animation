@@ -13,6 +13,7 @@ flat out int id;
 out vec4 color;
 out vec4 eye;
 out vec3 normal;
+out vec4 coordinate;
 varying vec2 tex;
 flat out int mylight1;
 flat out int mylight2;
@@ -26,6 +27,7 @@ void main (void)
   gl_Position = uModelViewMatrix * vPosition;
   normal = normalize((normalMatrix * normalize(vNormal)));
   eye = -gl_Position;
+  coordinate= gl_Position;
   color = vColor;
   tex = texCoord;
   if(light1){

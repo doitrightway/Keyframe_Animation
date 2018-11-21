@@ -10,6 +10,7 @@ flat in int mylight1;
 flat in int mylight2;
 in vec4 color;
 varying vec2 tex;
+in vec4 coordinate;
 in vec3 normal;
 in vec4 eye;
 
@@ -26,12 +27,12 @@ void main ()
     // Defining Light
     vec4 lightPos1 = vec4(10.0, 5.0, 0.0, 0.0);;
     vec3 lightDir1 = vec3(viewMatrix * lightPos1);
-    lightDir1 = normalize(lightDir1);
+    lightDir1 = normalize(lightDir1-vec3(coordinate));
 
     // Defining second light
     vec4 lightPos2 = vec4(-3.0, -2.0, 0.0, 0.0);
     vec3 lightDir2 = vec3(viewMatrix * lightPos2);
-    lightDir2 = normalize(lightDir2);
+    lightDir2 = normalize(lightDir2-vec3(coordinate));
 
     vec4 ascolor = vec4(0.0);
 

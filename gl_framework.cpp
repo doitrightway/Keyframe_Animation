@@ -70,21 +70,16 @@ namespace csX75
       case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS)
         {
-           // std::cout<<xpos<<","<<ypos<<" ";
         	xpos=xpos+0.5f;
         	ypos=ypos+0.5f;
-            // std::cout<<xpos<<","<<ypos<<" ";
-    		// glReadPixels(xpos, 512-1-ypos, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zpos);
-            // std::cout<<xpos<<","<<ypos<<","<<zpos<<" ";
-            glm::vec4 tresult= ModelViewMatrix*glm::vec4((float)xpos/512*10-5,(float)(512-1-ypos)/512*10-5,
+          glm::vec4 tresult= ModelViewMatrix*glm::vec4((float)xpos/512*10-5,(float)(512-1-ypos)/512*10-5,
               -(float)2,1);
-            glm::vec3 result = glm::vec3(tresult[0]/tresult[3],tresult[1]/tresult[3],tresult[2]/tresult[3]);
-            control_points[number]=result;
-            ellipsoid sp(10,10,0.06,0.06,0.06,glm::vec4(0.9,0.3,0.4,1));
+          glm::vec3 result = glm::vec3(tresult[0]/tresult[3],tresult[1]/tresult[3],tresult[2]/tresult[3]);
+          control_points[number]=result;
+          ellipsoid sp(10,10,0.06,0.06,0.06,glm::vec4(0.9,0.3,0.4,1));
         	display_points[number]=new csX75::HNode(center,sp.siz,sp.positions,sp.colors,sp.normals);
-            display_points[number]->change_parameters(result[0],result[1],result[2],0,0,0);
-            std::cout<<result[0]<<","<<result[1]<<","<<result[2]<<" ";
-            number++;
+          display_points[number]->change_parameters(result[0],result[1],result[2],0,0,0);
+          number++;
         }
           break;
       default:

@@ -487,10 +487,7 @@ void renderGL(void)
   	double tim=glfwGetTime();
   	if(tim-last_time>fps_cam_time){
 	  	counter+=delta_t;
-	  	// c_xrot=0;
-	  	// c_yrot=0;
-	  	// c_zrot=0;
-	  	cam_pos=get_Bezier(counter);
+      cam_pos=get_Bezier(counter);
 	  	c_xpos=cam_pos[0];
 	  	c_ypos=cam_pos[1];
 	  	c_zpos=cam_pos[2];
@@ -513,13 +510,11 @@ void renderGL(void)
   			counter++;
   		}
   		else{
-  			// std::cout<<"helllo";
   			start=0;
   			key_file.close();
   		}
   	}
   	else{
-  		// std::cout<<"heloooooo";
   		start=0;
   		key_file.close();
   	}
@@ -636,8 +631,6 @@ glm::vec3 get_Bezier(double x){
 	}
 	tot=(tot/x)*(1-x)/(n-1);
 	res+=glm::vec3(c_door)*glm::vec3(tot);
-
-	std::cout<<"yo:"<<x<<" ("<<res[0]<<","<<res[1]<<","<<res[2]<<") ";
 	
 	return res;
 }
