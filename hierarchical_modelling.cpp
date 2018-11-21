@@ -441,6 +441,7 @@ void renderGL(void)
   if(start==1){
     start=2;
     last_time=glfwGetTime();
+    cam_pos=get_Bezier(counter);
   }
   if(start==2 && counter>=1){
   	start=0;
@@ -454,16 +455,17 @@ void renderGL(void)
   	long tim=glfwGetTime();
   	if(tim-last_time>fps_time){
 	  	counter+=delta_t;
-	  	c_xrot=0;
-	  	c_yrot=0;
-	  	c_zrot=0;
-	  	glm::vec3 temp=get_Bezier(counter);
-	  	c_xpos=temp[0];
-	  	c_ypos=temp[1];
-	  	c_zpos=temp[2];
-	  	nor=glm::vec3(c_box)-temp;
+	  	// c_xrot=0;
+	  	// c_yrot=0;
+	  	// c_zrot=0;
+	  	cam_pos=get_Bezier(counter);
+	  	c_xpos=cam_pos[0];
+	  	c_ypos=cam_pos[1];
+	  	c_zpos=cam_pos[2];
+	  	
 	  	last_time=tim;
 	}
+	nor=glm::vec3(c_box)-cam_pos;
   }
   // if(start==3){
   // 	start=4;

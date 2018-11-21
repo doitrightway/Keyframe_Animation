@@ -130,6 +130,7 @@ glm::vec3 control_points[100];
 long last_time=0;
 long fps_time=0.001;
 std::ifstream key_file;
+glm::vec3 cam_pos;
 
 //-------------------------------------------------------------------------
 
