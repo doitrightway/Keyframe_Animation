@@ -467,18 +467,30 @@ void renderGL(void)
 	}
 	nor=glm::vec3(c_box)-cam_pos;
   }
-  // if(start==3){
-  // 	start=4;
-  // 	key_file.open("keyframe.txt");
-  // 	last_time=glfwGetTime();
-  // }
-  // if(start==4){
-  // 	long tim=glfwGetTime();
-  // 	if(tim-last_time>fps_time){
-  // 		csX75::state a;
-  // 		if(key_file.read((char*)&))
-  // 	}
-  // }
+  if(start==3){
+  	start=4;
+  	key_file.open("keyframe.txt");
+  	last_time=glfwGetTime();
+  	counter=1;
+  }
+  if(start==4){
+  	long tim=glfwGetTime();
+  	if(tim-last_time>fps_time){
+  		csX75::state a;
+  		if(counter<11){
+
+  		}
+  		else{
+	  		if(key_file.read((char*)&a,sizeof(a))){
+
+	  		}
+	  		else{
+	  			key_file.close();
+
+	  		}
+  		}
+  	}
+  }
 
   c_rotation_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(c_xrot), glm::vec3(1.0f,0.0f,0.0f));
   c_rotation_matrix = glm::rotate(c_rotation_matrix, glm::radians(c_yrot), glm::vec3(0.0f,1.0f,0.0f));
