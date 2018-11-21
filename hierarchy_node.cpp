@@ -83,6 +83,7 @@ namespace csX75
 
 		num_vertices = num_v;
 		islight=0;
+		state=0;
 
 		//Ask GL for a Vertex Attribute Objects (vao)
 		glGenVertexArrays (1, &vao);
@@ -129,6 +130,7 @@ namespace csX75
 
 		num_vertices = num_v;
 		islight=0;
+
 		vertex_buffer_size = num_v*16;
 		texture_buffer_size = num_v*8;
 		color_buffer_size = num_v*16;
@@ -232,7 +234,7 @@ namespace csX75
   				glBindTexture(GL_TEXTURE_2D, temp);
   			}
   			else
-  			{
+  			{	
   				GLuint temp= LoadTexture(tex.c_str(),texx,texy);
   				glBindTexture(GL_TEXTURE_2D, temp);
   			}

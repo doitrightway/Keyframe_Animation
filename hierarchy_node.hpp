@@ -46,6 +46,7 @@ namespace csX75	 {
 
 	  public:
 	  	int islight;
+	  	int state;
 	  	glm::mat4 rotation;
 		glm::mat4 translation;
 		HNode (HNode*, GLuint, glm::vec4*,  glm::vec4*, glm::vec3*);

@@ -39,9 +39,9 @@ GLfloat c_up_x = 0.0, c_up_y = 1.0, c_up_z = 0.0;
 GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
 
 // Coordinates of box
-const glm::vec4 c_box=glm::vec4(4,4,4,1);
-const glm::vec4 c_box_look=glm::vec4(0,0,2,1);
-const glm::vec4 c_door=glm::vec4(-4,-4,-4,1);
+const glm::vec4 c_box=glm::vec4(0,0,0,1);
+const glm::vec4 c_box_look=glm::vec4(-2,3,0,1);
+const glm::vec4 c_door=glm::vec4(-8,-8,-8,1);
 
 //Running variable to toggle culling on/off
 bool enable_culling=true;
