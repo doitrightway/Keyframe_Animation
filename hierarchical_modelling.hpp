@@ -128,7 +128,7 @@ double counter=0;
 double delta_t=0.04;
 glm::vec3 control_points[100];
 long last_time=0;
-long fps_time=0.001;
+long fps_time=0.0003;
 std::ifstream key_file;
 glm::vec3 cam_pos;
 csX75::state prev_state, fut_state;
