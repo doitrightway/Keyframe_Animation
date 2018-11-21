@@ -18,6 +18,8 @@
 #define DELETE 127
 
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include "gl_framework.hpp"
 #include "shader_util.hpp"
 #include "glm/vec3.hpp"
@@ -36,6 +38,11 @@ GLfloat c_xpos = 0, c_ypos = 0, c_zpos = 2.0;
 GLfloat c_up_x = 0.0, c_up_y = 1.0, c_up_z = 0.0;
 GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
 
+// Coordinates of box
+const glm::vec4 c_box=glm::vec4(4,4,4,1);
+const glm::vec4 c_box_look=glm::vec4(0,0,2,1);
+const glm::vec4 c_door=glm::vec4(-4,-4,-4,1);
+
 //Running variable to toggle culling on/off
 bool enable_culling=true;
 //Running variable to toggle wireframe/solid modelling
@@ -50,8 +57,6 @@ GLuint light1,light2;
 // //global matrix stack for hierarchical modelling
 std::vector<glm::mat4> matrixStack;
 
-csX75::HNode* myroom;
-csX75::HNode* troom;
 csX75::HNode* curr_node;
 csX75::HNode* center;
 csX75::HNode* front;
@@ -116,6 +121,16 @@ csX75::HNode* chleg24;
 csX75::HNode* smbox1;
 csX75::HNode* smbox2;
 // csX75::HNode* centroid_box;
+
+csX75::HNode* display_points[100];
+int number=0,start=0;
+double counter=0;
+double delta_t=0.04;
+glm::vec3 control_points[100];
+long last_time=0;
+long fps_time=0.001;
+std::ifstream key_file;
+glm::vec3 cam_pos;
 
 //-------------------------------------------------------------------------
 

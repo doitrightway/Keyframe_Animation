@@ -3,6 +3,7 @@
 in vec4 vPosition;
 in vec2 texCoord;
 in vec4 vColor;
+
 in vec3 vNormal;
 uniform bool vid;
 uniform bool light1;
@@ -18,7 +19,6 @@ uniform mat4 viewMatrix;
 
 void main (void) 
 {
-
   vec4 diffuse = vec4(0.5, 0.0, 0.0, 1.0); 
   vec4 ambient = vec4(0.1, 0.0, 0.0, 1.0);
   vec4 specular = vec4(1.0, 0.5, 0.5, 1.0);

@@ -31,6 +31,8 @@ glm::mat4 lookat_matrix;
 glm::mat4 view_matrix;
 GLuint vao,vbo;
 
+glm::mat3 ModelViewMatrix;
+
 GLuint normalMatrix;
 GLuint viewMatrix;
 GLuint uModelViewMatrix;
@@ -39,6 +41,7 @@ bool mylight1;
 bool mylight2;
 
 void createman(float,float);
+glm::vec3 get_Bezier(double);
 
 //-----------------------------------------------------------------
 
@@ -202,7 +205,7 @@ void initBuffersGL(void)
   wall_light->islight=1;
   wall_light->change_parameters(0*lightscale,2*lightscale,0*lightscale,0,0,0);
 
-  
+
 ///////////////////////////////////////////
 
 
@@ -435,14 +438,60 @@ void renderGL(void)
   matrixStack.clear();
 
   // //Creating the lookat and the up vectors for the camera
+  glm::vec3 nor=glm::vec3(0.0);
+
+  if(start==1){
+    start=2;
+    last_time=glfwGetTime();
+    cam_pos=get_Bezier(counter);
+  }
+  if(start==2 && counter>=1){
+  	start=0;
+  	counter=0;
+  	for(int i=0;i<number;i++){
+  		delete display_points[i];
+  	}
+  	number=0;
+  }
+  else if(start==2 && counter<1){
+  	long tim=glfwGetTime();
+  	if(tim-last_time>fps_time){
+	  	counter+=delta_t;
+	  	// c_xrot=0;
+	  	// c_yrot=0;
+	  	// c_zrot=0;
+	  	cam_pos=get_Bezier(counter);
+	  	c_xpos=cam_pos[0];
+	  	c_ypos=cam_pos[1];
+	  	c_zpos=cam_pos[2];
+	  	
+	  	last_time=tim;
+	}
+	nor=glm::vec3(c_box)-cam_pos;
+  }
+  // if(start==3){
+  // 	start=4;
+  // 	key_file.open("keyframe.txt");
+  // 	last_time=glfwGetTime();
+  // }
+  // if(start==4){
+  // 	long tim=glfwGetTime();
+  // 	if(tim-last_time>fps_time){
+  // 		csX75::state a;
+  // 		if(key_file.read((char*)&))
+  // 	}
+  // }
+
   c_rotation_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(c_xrot), glm::vec3(1.0f,0.0f,0.0f));
   c_rotation_matrix = glm::rotate(c_rotation_matrix, glm::radians(c_yrot), glm::vec3(0.0f,1.0f,0.0f));
   c_rotation_matrix = glm::rotate(c_rotation_matrix, glm::radians(c_zrot), glm::vec3(0.0f,0.0f,1.0f));
 
   glm::vec4 c_pos = glm::vec4(c_xpos,c_ypos,c_zpos, 1.0)*c_rotation_matrix;
   glm::vec4 c_up = glm::vec4(c_up_x,c_up_y,c_up_z, 1.0)*c_rotation_matrix;
+  
+
   //Creating the lookat matrix
-  lookat_matrix = glm::lookAt(glm::vec3(c_pos),glm::vec3(0.0),glm::vec3(c_up));
+  lookat_matrix = glm::lookAt(glm::vec3(c_pos),nor,glm::vec3(c_up));
 
   //creating the projection matrix
   if(enable_perspective)
@@ -453,12 +502,31 @@ void renderGL(void)
 
   view_matrix = projection_matrix*lookat_matrix;
 
+  ModelViewMatrix = (glm::inverse(glm::mat3(lookat_matrix)));
+
   glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
 
   matrixStack.push_back(view_matrix);
   center->render_tree();
 
+}
+
+glm::vec3 get_Bezier(double x){
+	glm::vec3 res=glm::vec3(0,0,0);
+	int n=number+2;
+	double tot=pow(x,n-1);
+	res=glm::vec3(c_box_look)*glm::vec3(tot);
+	for(int i=0;i<number;i++){
+		tot=(tot/x)*(1-x)*(n-1-(float)i)/(i+1);
+		res+=control_points[i]*glm::vec3(tot);
+	}
+	tot=(tot/x)*(1-x)/(n-1);
+	res+=glm::vec3(c_door)*glm::vec3(tot);
+
+	std::cout<<"yo:"<<x<<" ("<<res[0]<<","<<res[1]<<","<<res[2]<<") ";
+	
+	return res;
 }
 
 int main(int argc, char** argv)
@@ -512,6 +580,8 @@ int main(int argc, char** argv)
   glfwSetKeyCallback(window, csX75::key_callback);
   //Framebuffer resize callback
   glfwSetFramebufferSizeCallback(window, csX75::framebuffer_size_callback);
+
+  glfwSetMouseButtonCallback(window, csX75::mouse_button_callback);
 
   // Ensure we can capture the escape key being pressed below
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);

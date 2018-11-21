@@ -44,7 +44,7 @@ namespace csX75
 
 		glBufferSubData( GL_ARRAY_BUFFER, vertex_buffer_size+ texture_buffer_size+color_buffer_size, 
 			normal_buffer_size, normals );
-		
+
 		delete[] tex_coord;
 		//setup the vertex array as per the shader
 		glEnableVertexAttribArray( vPosition );
@@ -299,6 +299,11 @@ namespace csX75
 		update_matrices();
 	}
 
+	void HNode::get_rotation(GLfloat t[3]){
+		t[0]=rx;
+		t[1]=ry;
+		t[2]=rz;
+	}
 
 	glm::mat4* multiply_stack(std::vector<glm::mat4> matStack){
 		glm::mat4* mult;
@@ -310,5 +315,6 @@ namespace csX75
 
 		return mult;
 	}
+
 
 }
