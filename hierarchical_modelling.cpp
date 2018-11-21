@@ -440,6 +440,7 @@ void renderGL(void)
 
   if(start==1){
     start=2;
+    last_time=glfwGetTime();
   }
   if(start==2 && counter>=1){
   	start=0;
@@ -450,16 +451,32 @@ void renderGL(void)
   	number=0;
   }
   else if(start==2 && counter<1){
-  	counter+=delta_t;
-  	c_xrot=0;
-  	c_yrot=0;
-  	c_zrot=0;
-  	glm::vec3 temp=get_Bezier(counter);
-  	c_xpos=temp[0];
-  	c_ypos=temp[1];
-  	c_zpos=temp[2];
-  	nor=glm::vec3(c_box)-temp;
+  	long tim=glfwGetTime();
+  	if(tim-last_time>fps_time){
+	  	counter+=delta_t;
+	  	c_xrot=0;
+	  	c_yrot=0;
+	  	c_zrot=0;
+	  	glm::vec3 temp=get_Bezier(counter);
+	  	c_xpos=temp[0];
+	  	c_ypos=temp[1];
+	  	c_zpos=temp[2];
+	  	nor=glm::vec3(c_box)-temp;
+	  	last_time=tim;
+	}
   }
+  // if(start==3){
+  // 	start=4;
+  // 	key_file.open("keyframe.txt");
+  // 	last_time=glfwGetTime();
+  // }
+  // if(start==4){
+  // 	long tim=glfwGetTime();
+  // 	if(tim-last_time>fps_time){
+  // 		csX75::state a;
+  // 		if(key_file.read((char*)&))
+  // 	}
+  // }
 
   c_rotation_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(c_xrot), glm::vec3(1.0f,0.0f,0.0f));
   c_rotation_matrix = glm::rotate(c_rotation_matrix, glm::radians(c_yrot), glm::vec3(0.0f,1.0f,0.0f));

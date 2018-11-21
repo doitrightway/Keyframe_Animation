@@ -18,6 +18,8 @@
 #define DELETE 127
 
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include "gl_framework.hpp"
 #include "shader_util.hpp"
 #include "glm/vec3.hpp"
@@ -123,8 +125,11 @@ csX75::HNode* smbox2;
 csX75::HNode* display_points[100];
 int number=0,start=0;
 double counter=0;
-double delta_t=0.02;
+double delta_t=0.04;
 glm::vec3 control_points[100];
+long last_time=0;
+long fps_time=0.001;
+std::ifstream key_file;
 
 //-------------------------------------------------------------------------
 

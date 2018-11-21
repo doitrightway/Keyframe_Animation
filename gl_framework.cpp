@@ -278,10 +278,14 @@ namespace csX75
     }
     else if (key == GLFW_KEY_O && action == GLFW_PRESS && number>0 && start==0){
     	start=1;
-    }else if (key == GLFW_KEY_V && action == GLFW_PRESS){
+    }
+    else if (key == GLFW_KEY_V && action == GLFW_PRESS){
     	Save_Frame();
     }
-    
+    else if (key == GLFW_KEY_M && action==GLFW_PRESS && start==0){
+    	start=3;
+    }
+
   }
 
   void Save_Frame(){
