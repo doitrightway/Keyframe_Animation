@@ -6,7 +6,8 @@ in vec4 vColor;
 
 in vec3 vNormal;
 uniform bool vid;
-
+uniform bool light1;
+uniform bool light2;
 
 out vec4 id;
 out vec4 color;
@@ -22,29 +23,61 @@ void main (void)
   vec4 ambient = vec4(0.1, 0.0, 0.0, 1.0);
   vec4 specular = vec4(1.0, 0.5, 0.5, 1.0);
   float shininess = 0.05;
-  vec4 spec = vec4(0.0); 
-  
-  // Defining Light 
-  vec4 lightPos = vec4(1.0, 1.0, 1.0, 0.0);
-  vec3 lightDir = vec3(viewMatrix * lightPos); 
-  lightDir = normalize(lightDir);  
-
+  vec4 spec1 = vec4(0.0);
+  vec4 spec2 = vec4(0.0); 
   gl_Position = uModelViewMatrix * vPosition;
+  vec3 eye = normalize( vec3(-gl_Position));
+
+  // Defining Light 
+  vec4 lightPos1 = vec4(5.0, 5.0, 5.0, 0.0);
+  vec3 lightDir1 = vec3(viewMatrix * lightPos1); 
+  lightDir1 = normalize(lightDir1);  
+
   
   vec3 n = normalize(normalMatrix * normalize(vNormal));
-  float dotProduct = dot(n, lightDir);
-  float intensity =  max( dotProduct, 0.0);
+  float dotProduct1 = dot(n, lightDir1);
+  float intensity1 =  max( dotProduct1, 0.0);
 
   // Compute specular component only if light falls on vertex
-  if(intensity > 0.0)
+  if(intensity1 > 0.0)
   {
-	vec3 eye = normalize( vec3(-gl_Position));
-	vec3 h = normalize(lightDir + eye );
-   	float intSpec = max(dot(h,n), 0.0);	
-        spec = specular * pow(intSpec, shininess);
-  }  	
-  
-  color = max((intensity * diffuse  + spec)*vColor, ambient);
+	vec3 h1 = normalize(lightDir1 + eye );
+   	float intSpec1 = max(dot(h1,n), 0.0);	
+        spec1 = specular * pow(intSpec1, shininess);
+  }  
+
+  vec4 lightPos2 = vec4(10.0, 5.0, 0.0, 0.0);
+  vec3 lightDir2 = vec3(viewMatrix * lightPos2); 
+  lightDir2 = normalize(lightDir2);  
+
+  float dotProduct2 = dot(n, lightDir2);
+  float intensity2 =  max( dotProduct2, 0.0);
+
+  // Compute specular component only if light falls on vertex
+  if(intensity2 > 0.0)
+  {
+	vec3 h2 = normalize(lightDir2 + eye );
+   	float intSpec2 = max(dot(h2,n), 0.0);	
+        spec2 = specular * pow(intSpec2, shininess);
+  }  
+
+
+  if(light1 && light2)
+  {
+  	 color = max(((intensity1 + intensity2) * diffuse  + spec1 + spec2)*vColor, ambient);
+  }
+  else if(light1)
+  {
+  	 color = max((intensity1 * diffuse  + spec1)*vColor, ambient);
+  }
+  else if(light2)
+  {
+  	 color = max((intensity2 * diffuse  + spec2)*vColor, ambient);
+  }
+  else
+  {
+  	 color = ambient;
+  }
 
   tex = texCoord;
   if(!vid){

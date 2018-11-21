@@ -38,7 +38,7 @@ GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
 
 // Coordinates of box
 const glm::vec4 c_box=glm::vec4(4,4,4,1);
-const glm::vec4 c_box_look=glm::vec4(0,0,0,1);
+const glm::vec4 c_box_look=glm::vec4(0,0,2,1);
 const glm::vec4 c_door=glm::vec4(-4,-4,-4,1);
 
 //Running variable to toggle culling on/off
@@ -50,12 +50,11 @@ bool enable_perspective=false;
 //Shader program attribs
 GLuint vPosition,vColor,texCoord, vNormal;
 GLuint vid;
+GLuint light1,light2;
 
 // //global matrix stack for hierarchical modelling
 std::vector<glm::mat4> matrixStack;
 
-csX75::HNode* myroom;
-csX75::HNode* troom;
 csX75::HNode* curr_node;
 csX75::HNode* center;
 csX75::HNode* front;
@@ -101,6 +100,10 @@ csX75::HNode* man14_shoe;
 csX75::HNode* man15_shoe;
 csX75::HNode* box1;
 csX75::HNode* box2;
+csX75::HNode* fixture;
+csX75::HNode* wall_light;
+csX75::HNode* lampstand;
+csX75::HNode* lamp_light;
 // csX75::HNode* centroid_box;
 
 csX75::HNode* display_points[100];
@@ -108,6 +111,7 @@ int number=0,start=0;
 double counter=0;
 double delta_t=0.02;
 glm::vec3 control_points[100];
+
 //-------------------------------------------------------------------------
 
 #endif

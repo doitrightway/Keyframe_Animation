@@ -22,6 +22,20 @@ namespace csX75
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
   void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
+
+struct state_person{
+	GLfloat torso[3];
+	GLfloat neck[3];
+	GLfloat leftlowerarm[3];
+	GLfloat rightlowerarm[3];
+	GLfloat leftlowerleg[3];
+	GLfloat rightlowerleg[3];
+};
+struct state{
+	int light1,light2;
+	state_person man,woman;
+};
 };
 
 #endif

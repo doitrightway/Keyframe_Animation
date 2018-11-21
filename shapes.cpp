@@ -266,7 +266,7 @@ public:
 		t_coords[1]=glm::vec2( 0.0, 1.0);
 		t_coords[2]=glm::vec2( 1.0, 0.0);
 		t_coords[3]=glm::vec2( 1.0, 1.0);
-		face_normals[0]=glm::vec3(0.0,-1.0,0.0);
+		face_normals[0]=glm::vec3(0.0,1.0,0.0);
 		face_normals[1]=glm::vec3(1.0,0.0,0.0);
 		face_normals[2]=glm::vec3(-1.0,0.0,0.0);
 		face_normals[3]=glm::vec3(0.0,0.0,-1.0);

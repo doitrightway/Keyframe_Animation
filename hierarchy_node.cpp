@@ -4,7 +4,8 @@
 #include <string>
 
 extern GLuint vPosition,vColor,texCoord, uModelViewMatrix, normalMatrix, vNormal;
-extern GLuint vid;
+extern GLuint vid, light1, light2;
+extern bool mylight1, mylight2;
 extern std::vector<glm::mat4> matrixStack;
 
 namespace csX75
@@ -228,6 +229,8 @@ namespace csX75
 		glm::mat3 normal_matrix= glm::transpose(glm::inverse(glm::mat3(*ms_mult)));
 		glUniformMatrix3fv(normalMatrix,1, GL_FALSE, glm::value_ptr(normal_matrix));
 		glUniform1i(vid,if_tex);
+		glUniform1i(light1,mylight1);
+		glUniform1i(light2,mylight2);
 		glBindVertexArray (vao);
 		glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 
@@ -281,6 +284,11 @@ namespace csX75
 		update_matrices();
 	}
 
+	void HNode::get_rotation(GLfloat t[3]){
+		t[0]=rx;
+		t[1]=ry;
+		t[2]=rz;
+	}
 
 	glm::mat4* multiply_stack(std::vector<glm::mat4> matStack){
 		glm::mat4* mult;
@@ -292,5 +300,6 @@ namespace csX75
 
 		return mult;
 	}
+
 
 }
