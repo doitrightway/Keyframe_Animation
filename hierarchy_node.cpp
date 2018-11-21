@@ -15,6 +15,7 @@ namespace csX75
 		glm::vec4* a_vertices, glm::vec4* a_colours, glm::vec3* normals){
 
 		num_vertices = num_v;
+		islight=0;
 		vertex_buffer_size = num_v*16;
 		texture_buffer_size = num_v*8;
 		color_buffer_size = num_v*16;
@@ -81,7 +82,7 @@ namespace csX75
 	HNode::HNode(HNode* a_parent, GLuint num_v){
 
 		num_vertices = num_v;
-
+		islight=0;
 
 		//Ask GL for a Vertex Attribute Objects (vao)
 		glGenVertexArrays (1, &vao);
@@ -127,6 +128,7 @@ namespace csX75
 		glm::vec2* tex_coord, glm::vec3* normals, std::string texture_file, int tex_x,int tex_y){
 
 		num_vertices = num_v;
+		islight=0;
 		vertex_buffer_size = num_v*16;
 		texture_buffer_size = num_v*8;
 		color_buffer_size = num_v*16;
@@ -219,8 +221,21 @@ namespace csX75
 		
     	
   		if(!if_tex){
-  			GLuint temp= LoadTexture(tex.c_str(),texx,texy);
-  			glBindTexture(GL_TEXTURE_2D, temp);
+  			if(islight==1 && mylight1)
+  			{
+  				GLuint temp= LoadTexture("images/glow.bmp",64,48);
+  				glBindTexture(GL_TEXTURE_2D, temp);
+  			}
+  			else if(islight==2 && mylight2)
+  			{
+  				GLuint temp= LoadTexture("images/glow.bmp",64,48);
+  				glBindTexture(GL_TEXTURE_2D, temp);
+  			}
+  			else
+  			{
+  				GLuint temp= LoadTexture(tex.c_str(),texx,texy);
+  				glBindTexture(GL_TEXTURE_2D, temp);
+  			}
   		}
 		//matrixStack multiply
 		glm::mat4* ms_mult = multiply_stack(matrixStack);

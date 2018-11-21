@@ -191,7 +191,7 @@ void initBuffersGL(void)
 ///////////////////Lighting////////////////
 
   float lightscale=1;
-  cylinder fix(10,20,1*lightscale,1*lightscale,2*lightscale,skincol);
+  cylinder fix(10,20,0.3*lightscale,0.3*lightscale,2*lightscale,skincol);
   ellipsoid light(10,20,0.5*lightscale,0.5*lightscale,0.5*lightscale,skincol);
 
   fixture= new csX75::HNode(center,fix.siz,fix.positions,fix.colors,fix.normals);
@@ -199,6 +199,7 @@ void initBuffersGL(void)
 
   wall_light= new csX75::HNode(fixture,light.siz,light.positions,light.colors,
     light.tex_coords,light.normals,"images/all.bmp",256,256);
+  wall_light->islight=1;
   wall_light->change_parameters(0*lightscale,2*lightscale,0*lightscale,0,0,0);
 
   
@@ -238,6 +239,7 @@ void initBuffersGL(void)
 
   lamp_light= new csX75::HNode(lampstand,light.siz,light.positions,light.colors,
     light.tex_coords,light.normals,"images/all.bmp",256,256);
+  lamp_light->islight=2;
   lamp_light->change_parameters(0*lightscale,2*lightscale,0*lightscale,0,0,0);
 /////////////////////////////////////////////
 
