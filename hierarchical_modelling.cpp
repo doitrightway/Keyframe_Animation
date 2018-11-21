@@ -86,18 +86,17 @@ void initBuffersGL(void)
   curr_node = center;
 
   int scale=20;
-  cuboid room(1*scale,1*scale,1*scale,1);
 
   int shift=scale/2;
   rectangle rect(scale,0,glm::vec4(1,0,1,1));
 
   front = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/walldoor.bmp",1300,752);
+    rect.colors,rect.tex_coords,rect.normals,"images/walldoor.bmp",256,148);
 
   front->change_parameters(-shift,-shift,shift,0,0,0);
 
   back = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/wallwin2.bmp",1156,1006);
+    rect.colors,rect.tex_coords,rect.normals,"images/wallwin2.bmp",256,223);
 
   back->change_parameters(-shift,-shift,-shift,0,0,0);
 
@@ -122,18 +121,88 @@ void initBuffersGL(void)
   top->change_parameters(-shift,shift,-shift,90,0,0);
 
 
-//////////////////////Lighting////////////////
+/////////////////////Chair1///////////////////
+
+  cuboid mychair(2,2,2,0);
+  cylinder chairlegs(10,20,1,1,5,red);
+  chairbase1= new csX75::HNode(center,36,mychair.positions,mychair.colors,mychair.normals);
+  chairbase1->change_parameters(6,-5,-4,0,0,0);
+
+  chairsupport1 = new csX75::HNode(chairbase1,36,mychair.positions,mychair.colors,mychair.normals);
+  chairsupport1->change_parameters(0,0,0,90,0,0);
+  chleg11= new csX75::HNode(chairbase1,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg11->change_parameters(0,-4.8,0,0,0,0);
+
+  chleg12=new csX75::HNode(chairbase1,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg12->change_parameters(2,-4.8,0,0,0,0);
+
+  chleg13=new csX75::HNode(chairbase1,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg13->change_parameters(0,-4.8,2,0,0,0);
+
+  chleg14=new csX75::HNode(chairbase1,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg14->change_parameters(2,-4.8,2,0,0,0);
+
+
+/////////////////////Chair2////////////
+
+  chairbase2= new csX75::HNode(center,36,mychair.positions,mychair.colors,mychair.normals);
+  chairbase2->change_parameters(-8,-5,-4,0,0,0);
+
+  chairsupport2 = new csX75::HNode(chairbase2,36,mychair.positions,mychair.colors,mychair.normals);
+  chairsupport2->change_parameters(0,0,0,90,0,0);
+  chleg21= new csX75::HNode(chairbase2,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg21->change_parameters(0,-4.8,0,0,0,0);
+
+  chleg22=new csX75::HNode(chairbase2,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg22->change_parameters(2,-4.8,0,0,0,0);
+
+  chleg23=new csX75::HNode(chairbase2,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg23->change_parameters(0,-4.8,2,0,0,0);
+
+  chleg24=new csX75::HNode(chairbase2,chairlegs.siz,chairlegs.positions,chairlegs.colors,
+    chairlegs.normals);
+
+  chleg24->change_parameters(2,-4.8,2,0,0,0);
+
+////////////////////////////////////////////////
+
+
+//////////////////Random box///////////////////
+  cuboid smallbox(2,2,2,0);
+  cuboid largebox(4,4,4,0);  
+
+  smbox1= new csX75::HNode(center,36,smallbox.positions,smallbox.colors,smallbox.normals);
+  smbox1->change_parameters(4,-10,-10,0,0,0);
+
+  smbox2= new csX75::HNode(center,36,largebox.positions,largebox.colors,largebox.normals);
+  smbox2->change_parameters(-6,-10,-10,0,0,0);
+
+///////////////////Lighting////////////////
 
   float lightscale=1;
-  cylinder fix(10,20,1*lightscale,1*lightscale,10*lightscale,skincol);
-  ellipsoid light(10,20,2*lightscale,2*lightscale,1*lightscale,skincol);
+  cylinder fix(10,20,1*lightscale,1*lightscale,2*lightscale,skincol);
+  ellipsoid light(10,20,0.5*lightscale,0.5*lightscale,0.5*lightscale,skincol);
 
-  fixture= new csX75::HNode(center,36,fix.positions,fix.colors,fix.normals);
+  fixture= new csX75::HNode(center,fix.siz,fix.positions,fix.colors,fix.normals);
   fixture->change_parameters(shift,0.5*shift,0*shift,0,0,90);
 
-  wall_light= new csX75::HNode(fixture,36,light.positions,light.colors,
+  wall_light= new csX75::HNode(fixture,light.siz,light.positions,light.colors,
     light.tex_coords,light.normals,"images/all.bmp",256,256);
-  wall_light->change_parameters(0*lightscale,10*lightscale,0*lightscale,0,0,0);
+  wall_light->change_parameters(0*lightscale,2*lightscale,0*lightscale,0,0,0);
 
 
 ///////////////////////////////////////////
@@ -167,12 +236,12 @@ void initBuffersGL(void)
 
 //////////////////////Lighting////////////////
 
-  lampstand= new csX75::HNode(table_top,36,fix.positions,fix.colors,fix.normals);
+  lampstand= new csX75::HNode(table_top,fix.siz,fix.positions,fix.colors,fix.normals);
   lampstand->change_parameters(0.5*table_sc,0.2*table_sc,2*table_sc,0,0,0);
 
-  lamp_light= new csX75::HNode(fixture,36,light.positions,light.colors,
-    light.tex_coords,light.normals,"images/all1.bmp",256,256);
-  wall_light->change_parameters(0*lightscale,10*lightscale,0*lightscale,0,0,0);
+  lamp_light= new csX75::HNode(lampstand,light.siz,light.positions,light.colors,
+    light.tex_coords,light.normals,"images/all.bmp",256,256);
+  lamp_light->change_parameters(0*lightscale,2*lightscale,0*lightscale,0,0,0);
 /////////////////////////////////////////////
 
   glm::vec4 arr[5]={skincol,red,blue,yellow,white};
