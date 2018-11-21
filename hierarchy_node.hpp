@@ -45,6 +45,7 @@ namespace csX75	 {
 		void update_matrices();
 
 	  public:
+	  	int islight;
 	  	glm::mat4 rotation;
 		glm::mat4 translation;
 		HNode (HNode*, GLuint, glm::vec4*,  glm::vec4*, glm::vec3*);

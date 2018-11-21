@@ -29,7 +29,7 @@ void main (void)
   vec3 eye = normalize( vec3(-gl_Position));
 
   // Defining Light 
-  vec4 lightPos1 = vec4(1.0, 1.0, 1.0, 0.0);
+  vec4 lightPos1 = vec4(10.0, 5.0, 0.0, 0.0);
   vec3 lightDir1 = vec3(viewMatrix * lightPos1); 
   lightDir1 = normalize(lightDir1);  
 
@@ -46,7 +46,7 @@ void main (void)
         spec1 = specular * pow(intSpec1, shininess);
   }  
 
-  vec4 lightPos2 = vec4(10.0, 5.0, 0.0, 0.0);
+  vec4 lightPos2 = vec4(-3.0, -2.0, 0.0, 0.0);
   vec3 lightDir2 = vec3(viewMatrix * lightPos2); 
   lightDir2 = normalize(lightDir2);  
 
