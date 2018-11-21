@@ -37,14 +37,18 @@ GLuint normalMatrix;
 GLuint viewMatrix;
 GLuint uModelViewMatrix;
 
+int filenumber=0;
+
 bool mylight1;
 bool mylight2;
 
 void createman(float,float);
 glm::vec3 get_Bezier(double);
 void change_state(double);
+void capture_frame(unsigned int);
 
 //-----------------------------------------------------------------
+
 
 void initBuffersGL(void)
 {
@@ -429,6 +433,32 @@ void createman(float body_sc,float scalebox)
 
 }
 
+void capture_frame(unsigned int framenum)
+{
+  //global pointer float *pRGB
+  unsigned char *pRGB = new unsigned char [3 * (SCREEN_WIDTH+1) * (SCREEN_HEIGHT + 1) ];
+
+
+  // set the framebuffer to read
+  //default for double buffered
+  glReadBuffer(GL_BACK);
+
+  glPixelStoref(GL_PACK_ALIGNMENT,1);//for word allignment
+
+  glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pRGB);
+  char filename[200];
+  sprintf(filename,"frame_%04d.ppm",framenum);
+  std::ofstream out(filename, std::ios::out);
+  out<<"P6"<<std::endl;
+  out<<SCREEN_WIDTH<<" "<<SCREEN_HEIGHT<<" 255"<<std::endl;
+  out.write(reinterpret_cast<char const *>(pRGB), (3 * (SCREEN_WIDTH+1) * (SCREEN_HEIGHT + 1)) * sizeof(int));
+  out.close();
+
+  //function to store pRGB in a file named count
+  delete pRGB;
+}
+
+
 void renderGL(void)
 {
   glEnable(GL_DEPTH_TEST);
@@ -478,6 +508,8 @@ void renderGL(void)
   			// std::cout<<"helo";
   			counter=1;
   			change_state(counter);
+        capture_frame(filenumber);
+        filenumber++;
   			counter++;
   		}
   		else{
@@ -497,6 +529,8 @@ void renderGL(void)
   	if(tim-last_time>fps_time){
   		if(counter<num_frames+1){
   			change_state(counter);
+        capture_frame(filenumber);
+        filenumber++;
   			last_time=tim;
   			counter++;
   		}
@@ -504,12 +538,15 @@ void renderGL(void)
   			prev_state=fut_state;
 	  		if(key_file.read((char*)&fut_state,sizeof(fut_state))){
 	  			counter=1;
- 	 			change_state(counter);
+ 	 			  change_state(counter);
+          capture_frame(counter);
+          filenumber++;
 	  			counter++;
 	  			last_time=tim;
 	  		}
 	  		else{
 	  			key_file.close();
+          filenumber=0;
 	  			counter=0;
 	  			start=0;
 	  		}
@@ -533,7 +570,7 @@ void renderGL(void)
     projection_matrix = glm::frustum(-5.0, 5.0, -5.0, 5.0, 2.0, 40.0);
     //projection_matrix = glm::perspective(glm::radians(90.0),1.0,0.1,5.0);
   else
-    projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, 0.0, 20.0);
+    projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, 0.0, 40.0);
 
   view_matrix = projection_matrix*lookat_matrix;
 
