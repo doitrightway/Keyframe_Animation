@@ -59,7 +59,13 @@ std::vector<glm::mat4> matrixStack;
 
 csX75::HNode* curr_node;
 csX75::HNode* center;
-csX75::HNode* front;
+// csX75::HNode* front;
+csX75::HNode* front_abovedoor;
+csX75::HNode* front_leftdoor;
+csX75::HNode* front_door;
+csX75::HNode* front_rightdoor;
+
+
 csX75::HNode* back;
 csX75::HNode* left;
 csX75::HNode* right;

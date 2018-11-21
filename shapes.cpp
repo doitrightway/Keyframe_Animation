@@ -16,7 +16,7 @@ class rectangle
 		glm::vec3* normals;
 
 		int* id;
-		rectangle(int scale, int iden, glm::vec4 col)
+		rectangle(int a,int b, int iden, glm::vec4 col)
 		{
 			positions=new glm::vec4[6];
 			colors= new glm::vec4[6];
@@ -24,11 +24,11 @@ class rectangle
 			normals= new glm::vec3[6];
 			id= new int[6];
 			positions[0]=glm::vec4(0.0,0.0,0.0, 1.0);
-			positions[1]=glm::vec4(scale,0.0,0.0, 1.0);
-			positions[2]=glm::vec4(scale,scale,0.0, 1.0);
+			positions[1]=glm::vec4(a,0.0,0.0, 1.0);
+			positions[2]=glm::vec4(a,b,0.0, 1.0);
 			positions[3]=glm::vec4(0.0,0.0,0.0, 1.0);
-			positions[4]=glm::vec4(0.0,scale,0.0, 1.0);
-			positions[5]=glm::vec4(scale,scale,0.0, 1.0);
+			positions[4]=glm::vec4(0.0,b,0.0, 1.0);
+			positions[5]=glm::vec4(a,b,0.0, 1.0);
 			tex_coords[0]=glm::vec2(0.0,0.0);
 			tex_coords[1]=glm::vec2(1.0,0.0);
 			tex_coords[2]=glm::vec2(1.0,1.0);

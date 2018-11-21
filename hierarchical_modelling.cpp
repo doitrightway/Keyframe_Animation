@@ -91,12 +91,32 @@ void initBuffersGL(void)
   int scale=20;
 
   int shift=scale/2;
-  rectangle rect(scale,0,glm::vec4(1,0,1,1));
+  rectangle rect(scale,scale,0,glm::vec4(1,0,1,1));
+  rectangle abovedoor(20,5,0,glm::vec4(1,0,1,1));
+  rectangle leftdoor(2,15,0,glm::vec4(1,0,1,1));
+  rectangle door(4,15,0,glm::vec4(1,0,1,1));
+  rectangle rightdoor(14,15,0,glm::vec4(1,0,1,1));
 
-  front = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/walldoor.bmp",256,148);
+  front_abovedoor = new csX75::HNode(center,6,abovedoor.positions,
+    abovedoor.colors,abovedoor.tex_coords,abovedoor.normals,"images/table_top.bmp",256,162);
 
-  front->change_parameters(-shift,-shift,shift,0,0,0);
+  front_abovedoor->change_parameters(-shift,5,shift,0,0,0);
+
+  front_leftdoor = new csX75::HNode(center,6,leftdoor.positions,
+    leftdoor.colors,leftdoor.tex_coords,leftdoor.normals,"images/table_top.bmp",256,162);
+
+  front_leftdoor->change_parameters(-shift,-shift,shift,0,0,0);
+
+  front_door = new csX75::HNode(center,6,door.positions,
+    door.colors,door.tex_coords,door.normals,"images/furniture.bmp",256,192);
+
+  front_door->change_parameters(-8,-shift,shift,0,0,0);
+
+  front_rightdoor = new csX75::HNode(center,6,rightdoor.positions,
+    rightdoor.colors,rightdoor.tex_coords,rightdoor.normals,"images/table_top.bmp",256,162);
+
+  front_rightdoor->change_parameters(-4,-shift,shift,0,0,0);
+
 
   back = new csX75::HNode(center,6,rect.positions,
     rect.colors,rect.tex_coords,rect.normals,"images/wallwin2.bmp",256,223);
