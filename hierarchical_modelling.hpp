@@ -101,6 +101,20 @@ csX75::HNode* fixture;
 csX75::HNode* wall_light;
 csX75::HNode* lampstand;
 csX75::HNode* lamp_light;
+csX75::HNode* chairbase1;
+csX75::HNode* chairbase2;
+csX75::HNode* chairsupport1;
+csX75::HNode* chairsupport2;
+csX75::HNode* chleg11;
+csX75::HNode* chleg12;
+csX75::HNode* chleg13;
+csX75::HNode* chleg14;
+csX75::HNode* chleg21;
+csX75::HNode* chleg22;
+csX75::HNode* chleg23;
+csX75::HNode* chleg24;
+csX75::HNode* smbox1;
+csX75::HNode* smbox2;
 // csX75::HNode* centroid_box;
 
 //-------------------------------------------------------------------------

@@ -29,7 +29,7 @@ void main (void)
   vec3 eye = normalize( vec3(-gl_Position));
 
   // Defining Light 
-  vec4 lightPos1 = vec4(5.0, 5.0, 5.0, 0.0);
+  vec4 lightPos1 = vec4(1.0, 1.0, 1.0, 0.0);
   vec3 lightDir1 = vec3(viewMatrix * lightPos1); 
   lightDir1 = normalize(lightDir1);  
 

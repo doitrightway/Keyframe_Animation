@@ -230,7 +230,7 @@ namespace csX75
 		glUniformMatrix3fv(normalMatrix,1, GL_FALSE, glm::value_ptr(normal_matrix));
 		glUniform1i(vid,if_tex);
 		glUniform1i(light1,mylight1);
-		glUniform1i(light2,mylight2);
+		glUniform1i(light2,mylight2	);
 		glBindVertexArray (vao);
 		glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 
