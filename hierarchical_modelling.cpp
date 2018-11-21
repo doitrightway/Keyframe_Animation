@@ -484,8 +484,8 @@ void renderGL(void)
   	number=0;
   }
   else if(start==2 && counter<1){
-  	long tim=glfwGetTime();
-  	if(tim-last_time>fps_time){
+  	double tim=glfwGetTime();
+  	if(tim-last_time>fps_cam_time){
 	  	counter+=delta_t;
 	  	// c_xrot=0;
 	  	// c_yrot=0;
@@ -525,7 +525,7 @@ void renderGL(void)
   	}
   }
   else if(start==4){
-  	long tim=glfwGetTime();
+  	double tim=glfwGetTime();
   	if(tim-last_time>fps_time){
   		if(counter<num_frames+1){
   			change_state(counter);
