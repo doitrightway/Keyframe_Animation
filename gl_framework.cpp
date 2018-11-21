@@ -20,7 +20,7 @@ int person=0;
 
 extern glm::mat4 projection_matrix, uModelViewMatrix;
 extern csX75::HNode* display_points[100];
-extern glm::mat3 ModelViewMatrix;
+extern glm::mat4 ModelViewMatrix;
 extern int number,start;
 extern glm::vec3 control_points[100];
 
@@ -76,7 +76,9 @@ namespace csX75
             // std::cout<<xpos<<","<<ypos<<" ";
     		// glReadPixels(xpos, 512-1-ypos, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zpos);
             // std::cout<<xpos<<","<<ypos<<","<<zpos<<" ";
-            glm::vec3 result= glm::vec3((float)xpos/512*10-5,(float)(512-1-ypos)/512*10-5,(float)2)*ModelViewMatrix;
+            glm::vec4 tresult= glm::vec4((float)xpos/512*10-5,(float)(512-1-ypos)/512*10-5,
+              (float)2,1)*ModelViewMatrix;
+            glm::vec3 result = glm::vec3(tresult[0]/tresult[3],tresult[1]/tresult[3],tresult[2]/tresult[3]);
             control_points[number]=result;
             ellipsoid sp(10,10,0.06,0.06,0.06,glm::vec4(0.9,0.3,0.4,1));
         	display_points[number]=new csX75::HNode(center,sp.siz,sp.positions,sp.colors,sp.normals);

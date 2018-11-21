@@ -31,7 +31,7 @@ glm::mat4 lookat_matrix;
 glm::mat4 view_matrix;
 GLuint vao,vbo;
 
-glm::mat3 ModelViewMatrix;
+glm::mat4 ModelViewMatrix;
 
 GLuint normalMatrix;
 GLuint viewMatrix;
@@ -101,22 +101,22 @@ void initBuffersGL(void)
   back->change_parameters(-shift,-shift,-shift,0,0,0);
 
   left = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/all.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/wall.bmp",256,174);
 
   left->change_parameters(-shift,-shift,-shift,0,-90,0);
 
   right = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/all.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/wall.bmp",256,174);
 
   right->change_parameters(shift,-shift,-shift,0,-90,0);
 
   bottom = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/all1.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/floor.bmp",256,170);
 
   bottom->change_parameters(-shift,-shift,-shift,90,0,0);
 
   top = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/all1.bmp",256,256);
+    rect.colors,rect.tex_coords,rect.normals,"images/roof.bmp",256,158);
 
   top->change_parameters(-shift,shift,-shift,90,0,0);
 
@@ -213,25 +213,25 @@ void initBuffersGL(void)
 
   cuboid tab_top(4*table_sc,0.2*table_sc,4*table_sc,1);
   table_top= new csX75::HNode(center,36,tab_top.positions,tab_top.colors,
-  	tab_top.tex_coords,tab_top.normals,"images/all1.bmp",256,256);
+  	tab_top.tex_coords,tab_top.normals,"images/table_top.bmp",256,162);
   table_top->change_parameters(-2*table_sc,-2*table_sc,-2*table_sc,0,0,0);
 
   cylinder tab_legs(20,20,0.3*table_sc,0.2*table_sc,3.2*table_sc,0);
   
   tab_leg1=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/furniture.bmp",256,192);
   tab_leg1->change_parameters(0,-3*table_sc,0,-0,0,0);
 
   tab_leg2=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/furniture.bmp",256,192);
   tab_leg2->change_parameters(4*table_sc,-3*table_sc,0*table_sc,0,0,0);
 
   tab_leg3=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/furniture.bmp",256,192);
   tab_leg3->change_parameters(0*table_sc,-3*table_sc,4*table_sc,0,0,0);
 
   tab_leg4=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
-  	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
+  	tab_legs.tex_coords,tab_legs.normals,"images/furniture.bmp",256,192);
   tab_leg4->change_parameters(4*table_sc,-3*table_sc,4*table_sc,0,0,0);
 
 
@@ -466,8 +466,8 @@ void renderGL(void)
 	  	c_zpos=cam_pos[2];
 	  	
 	  	last_time=tim;
-	}
-	nor=glm::vec3(c_box)-cam_pos;
+	  }
+	  nor=glm::vec3(c_box)-cam_pos;
   }
   // if(start==3){
   // 	start=4;
@@ -502,7 +502,7 @@ void renderGL(void)
 
   view_matrix = projection_matrix*lookat_matrix;
 
-  ModelViewMatrix = (glm::inverse(glm::mat3(lookat_matrix)));
+  ModelViewMatrix = (glm::inverse(lookat_matrix));
 
   glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));

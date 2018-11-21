@@ -1,4 +1,4 @@
-# a2-model-160050045_160050046
+# a3-animate-160050045_160050046
 
 ## Team members:
 
@@ -19,25 +19,25 @@ make
 
 | Keys | Control |
 | --- | --- |
-| B | Change control to box |
+| ADWSQE | change camera location |
+| F1 | Wall light (On/Off) |
+| F2 | Table lamp (On/Off) |
+| M | Play animation |
+| O | Camera animation on bezier curve |
+| V | Recording keyframes |
+
 | L | Open lid of box |
 | Left-Right | rotate about y-axis |
 | Up-Down | rotate about x-axis |
 | PgUp-PgDown | rotate about z-axis |
 | P | Change perspective |
-| ADWSQE | change camera location |
 | T | Change the control to other puppet |
 | 1 | Centroid of dancer |
 | 2 | neck |
-| 3 | head |
-| 4 | left arm |
-| 5 | left elbow |
-| 6 | right arm |
-| 7 | right elbow |
-| 8 | left thigh |
-| 9 | left foot |
-| 0 | right thigh |
-| = | right foot |
+| 3 | left elbow |
+| 4 | right elbow |
+| 5 | left thigh |
+| 6 | right thigh |
 
 ## Notes:
 
