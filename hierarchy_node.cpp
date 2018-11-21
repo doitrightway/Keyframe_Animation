@@ -304,6 +304,12 @@ namespace csX75
 		t[1]=ry;
 		t[2]=rz;
 	}
+	void HNode::set_rotation(GLfloat t[3]){
+		rx=t[0];
+		ry=t[1];
+		rz=t[2];
+		update_matrices();
+	}
 
 	glm::mat4* multiply_stack(std::vector<glm::mat4> matStack){
 		glm::mat4* mult;

@@ -35,6 +35,7 @@ struct state_person{
 struct state{
 	int light1,light2;
 	state_person man,woman;
+	GLfloat box_lid[3];
 };
 };
 

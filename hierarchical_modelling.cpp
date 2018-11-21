@@ -42,6 +42,7 @@ bool mylight2;
 
 void createman(float,float);
 glm::vec3 get_Bezier(double);
+void change_state(double);
 
 //-----------------------------------------------------------------
 
@@ -82,8 +83,6 @@ void initBuffersGL(void)
 
 
   center = new csX75::HNode(NULL,0);
-
-  curr_node = center;
 
   int scale=20;
 
@@ -342,6 +341,7 @@ void initBuffersGL(void)
 
   // createman(0.8);
   createman(body_sc,scalebox);
+  curr_node=box2;
 
   // curr_node = node1_torso;
 
@@ -469,18 +469,53 @@ void renderGL(void)
 	  }
 	  nor=glm::vec3(c_box)-cam_pos;
   }
-  // if(start==3){
-  // 	start=4;
-  // 	key_file.open("keyframe.txt");
-  // 	last_time=glfwGetTime();
-  // }
-  // if(start==4){
-  // 	long tim=glfwGetTime();
-  // 	if(tim-last_time>fps_time){
-  // 		csX75::state a;
-  // 		if(key_file.read((char*)&))
-  // 	}
-  // }
+  if(start==3){
+  	start=4;
+  	key_file.open("keyframes.txt",std::ios::in | std::ios::binary);
+  	last_time=glfwGetTime();
+  	if(key_file.read((char*)&prev_state,sizeof(prev_state))){
+  		if(key_file.read((char*)&fut_state,sizeof(fut_state))){
+  			// std::cout<<"helo";
+  			counter=1;
+  			change_state(counter);
+  			counter++;
+  		}
+  		else{
+  			// std::cout<<"helllo";
+  			start=0;
+  			key_file.close();
+  		}
+  	}
+  	else{
+  		// std::cout<<"heloooooo";
+  		start=0;
+  		key_file.close();
+  	}
+  }
+  else if(start==4){
+  	long tim=glfwGetTime();
+  	if(tim-last_time>fps_time){
+  		if(counter<num_frames+1){
+  			change_state(counter);
+  			last_time=tim;
+  			counter++;
+  		}
+  		else{
+  			prev_state=fut_state;
+	  		if(key_file.read((char*)&fut_state,sizeof(fut_state))){
+	  			counter=1;
+ 	 			change_state(counter);
+	  			counter++;
+	  			last_time=tim;
+	  		}
+	  		else{
+	  			key_file.close();
+	  			counter=0;
+	  			start=0;
+	  		}
+  		}
+  	}
+  }
 
   c_rotation_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(c_xrot), glm::vec3(1.0f,0.0f,0.0f));
   c_rotation_matrix = glm::rotate(c_rotation_matrix, glm::radians(c_yrot), glm::vec3(0.0f,1.0f,0.0f));
@@ -511,6 +546,47 @@ void renderGL(void)
   center->render_tree();
 
 }
+
+
+void change_state(double counter){
+	// std::cout<<mylight1<<" "<<mylight2<<std::endl;
+	mylight2=fut_state.light2;
+	mylight1=fut_state.light1;
+	csX75::state a;
+	for(int i=0;i<3;i++){
+		a.man.torso[i]=prev_state.man.torso[i]*(num_frames-counter)/(float)num_frames+fut_state.man.torso[i]*counter/(float)num_frames;
+		a.man.neck[i]=prev_state.man.neck[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.man.neck[i];
+		a.man.leftlowerarm[i]=prev_state.man.leftlowerarm[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.man.leftlowerarm[i];
+		a.man.leftlowerleg[i]=prev_state.man.leftlowerleg[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.man.leftlowerleg[i];
+		a.man.rightlowerarm[i]=prev_state.man.rightlowerarm[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.man.rightlowerarm[i];
+		a.man.rightlowerleg[i]=prev_state.man.rightlowerleg[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.man.rightlowerleg[i];
+		a.woman.torso[i]=prev_state.woman.torso[i]*(num_frames-counter)/(float)num_frames+fut_state.woman.torso[i]*counter/(float)num_frames;
+		a.woman.neck[i]=prev_state.woman.neck[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.woman.neck[i];
+		a.woman.leftlowerarm[i]=prev_state.woman.leftlowerarm[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.woman.leftlowerarm[i];
+		a.woman.leftlowerleg[i]=prev_state.woman.leftlowerleg[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.woman.leftlowerleg[i];
+		a.woman.rightlowerarm[i]=prev_state.woman.rightlowerarm[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.woman.rightlowerarm[i];
+		a.woman.rightlowerleg[i]=prev_state.woman.rightlowerleg[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.woman.rightlowerleg[i];
+		
+		a.box_lid[i]=prev_state.box_lid[i]*(num_frames-counter)/(float)num_frames+counter/(float)num_frames*fut_state.box_lid[i];
+	}
+
+	man1_mtorso->set_rotation(a.man.torso);
+  	man2_mneck->set_rotation(a.man.neck);
+  	man5_leftarml->set_rotation(a.man.leftlowerarm);
+  	man7_rightarml->set_rotation(a.man.rightlowerarm);
+  	man9_leftfoot->set_rotation(a.man.leftlowerleg);
+  	man11_rightfoot->set_rotation(a.man.rightlowerleg);
+
+  	node1_torso->set_rotation(a.woman.torso);
+  	node2_neck->set_rotation(a.woman.neck);
+  	node5_leftarml->set_rotation(a.woman.leftlowerarm);
+  	node7_rightarml->set_rotation(a.woman.rightlowerarm);
+  	node9_leftfoot->set_rotation(a.woman.leftlowerleg);
+  	node11_rightfoot->set_rotation(a.woman.rightlowerleg);
+
+  	box2->set_rotation(a.box_lid);
+}
+
 
 glm::vec3 get_Bezier(double x){
 	glm::vec3 res=glm::vec3(0,0,0);
