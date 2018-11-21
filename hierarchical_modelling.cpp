@@ -34,7 +34,10 @@ GLuint vao,vbo;
 GLuint normalMatrix;
 GLuint viewMatrix;
 GLuint uModelViewMatrix;
-int scale=10;
+
+bool mylight1;
+bool mylight2;
+
 void createman(float,float);
 
 //-----------------------------------------------------------------
@@ -60,6 +63,8 @@ void initBuffersGL(void)
   texCoord = glGetAttribLocation( shaderProgram, "texCoord" ); 
 
   vid= glGetUniformLocation( shaderProgram, "vid" ); 
+  light1= glGetUniformLocation( shaderProgram, "light1" ); 
+  light2= glGetUniformLocation( shaderProgram, "light2" ); 
   uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
   viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
   normalMatrix = glGetUniformLocation( shaderProgram, "normalMatrix");
@@ -72,15 +77,13 @@ void initBuffersGL(void)
   glm::vec4 white=glm::vec4(0.5,0.3,0.7,1);
 
 
-  // GLuint tex=LoadTexture("images/all1.bmp",256,256);
-  // glBindTexture(GL_TEXTURE_2D, tex);
-
 
   center = new csX75::HNode(NULL,0);
 
   curr_node = center;
 
-  cuboid room(10,10,10,1);
+  int scale=20;
+  cuboid room(1*scale,1*scale,1*scale,1);
 
   int shift=scale/2;
   rectangle rect(scale,0,glm::vec4(1,0,1,1));
@@ -116,12 +119,29 @@ void initBuffersGL(void)
   top->change_parameters(-shift,shift,-shift,90,0,0);
 
 
-  int table_sc=1;
+//////////////////////Lighting////////////////
 
-  cuboid tab_top(2*table_sc,0.2*table_sc,4*table_sc,1);
+  float lightscale=1;
+  cylinder fix(10,20,1*lightscale,1*lightscale,10*lightscale,skincol);
+  ellipsoid light(10,20,2*lightscale,2*lightscale,1*lightscale,skincol);
+
+  fixture= new csX75::HNode(center,36,fix.positions,fix.colors,fix.normals);
+  fixture->change_parameters(shift,0.5*shift,0*shift,0,0,90);
+
+  wall_light= new csX75::HNode(fixture,36,light.positions,light.colors,
+    light.tex_coords,light.normals,"images/all.bmp",256,256);
+  wall_light->change_parameters(0*lightscale,10*lightscale,0*lightscale,0,0,0);
+
+  
+///////////////////////////////////////////
+
+
+  int table_sc=scale/10;
+
+  cuboid tab_top(4*table_sc,0.2*table_sc,4*table_sc,1);
   table_top= new csX75::HNode(center,36,tab_top.positions,tab_top.colors,
   	tab_top.tex_coords,tab_top.normals,"images/all1.bmp",256,256);
-  table_top->change_parameters(0*table_sc,-2*table_sc,0*table_sc,0,0,0);
+  table_top->change_parameters(-2*table_sc,-2*table_sc,-2*table_sc,0,0,0);
 
   cylinder tab_legs(20,20,0.3*table_sc,0.2*table_sc,3.2*table_sc,0);
   
@@ -131,7 +151,7 @@ void initBuffersGL(void)
 
   tab_leg2=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
   	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
-  tab_leg2->change_parameters(2*table_sc,-3*table_sc,0*table_sc,0,0,0);
+  tab_leg2->change_parameters(4*table_sc,-3*table_sc,0*table_sc,0,0,0);
 
   tab_leg3=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
   	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
@@ -139,9 +159,18 @@ void initBuffersGL(void)
 
   tab_leg4=new csX75::HNode(table_top,tab_legs.siz,tab_legs.positions,tab_legs.colors,
   	tab_legs.tex_coords,tab_legs.normals,"images/all1.bmp",256,256);
-  tab_leg4->change_parameters(2*table_sc,-3*table_sc,4*table_sc,0,0,0);
+  tab_leg4->change_parameters(4*table_sc,-3*table_sc,4*table_sc,0,0,0);
 
 
+//////////////////////Lighting////////////////
+
+  lampstand= new csX75::HNode(table_top,36,fix.positions,fix.colors,fix.normals);
+  lampstand->change_parameters(0.5*table_sc,0.2*table_sc,2*table_sc,0,0,0);
+
+  lamp_light= new csX75::HNode(fixture,36,light.positions,light.colors,
+    light.tex_coords,light.normals,"images/all1.bmp",256,256);
+  wall_light->change_parameters(0*lightscale,10*lightscale,0*lightscale,0,0,0);
+/////////////////////////////////////////////
 
   glm::vec4 arr[5]={skincol,red,blue,yellow,white};
 
@@ -153,7 +182,7 @@ void initBuffersGL(void)
 
   box1 = new csX75::HNode(table_top,box.siz,box.positions,box.colors
   	,box.normals);
-  box1->change_parameters(-2.0*scalebox,2.0*scalebox+0.2*table_sc,2.0*scalebox,0.0,180.0,180.0);
+  box1->change_parameters(1.0*table_sc,2.0*scalebox+0.2*table_sc,4.0*scalebox+1.0*table_sc,0.0,180.0,180.0);
   box2 = new csX75::HNode(box1,lid.siz,lid.positions,lid.colors,lid.normals);
 
   box2->change_parameters(4.0*scalebox,0.0,0.0,0.0,0.0,180.0);
@@ -349,7 +378,7 @@ void renderGL(void)
     projection_matrix = glm::frustum(-5.0, 5.0, -5.0, 5.0, 2.0, 40.0);
     //projection_matrix = glm::perspective(glm::radians(90.0),1.0,0.1,5.0);
   else
-    projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, 0.0, 10.0);
+    projection_matrix = glm::ortho(-5.0, 5.0, -5.0, 5.0, 0.0, 20.0);
 
   view_matrix = projection_matrix*lookat_matrix;
 

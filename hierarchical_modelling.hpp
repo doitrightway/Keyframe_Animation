@@ -45,6 +45,7 @@ bool enable_perspective=false;
 //Shader program attribs
 GLuint vPosition,vColor,texCoord, vNormal;
 GLuint vid;
+GLuint light1,light2;
 
 // //global matrix stack for hierarchical modelling
 std::vector<glm::mat4> matrixStack;
@@ -96,6 +97,10 @@ csX75::HNode* man14_shoe;
 csX75::HNode* man15_shoe;
 csX75::HNode* box1;
 csX75::HNode* box2;
+csX75::HNode* fixture;
+csX75::HNode* wall_light;
+csX75::HNode* lampstand;
+csX75::HNode* lamp_light;
 // csX75::HNode* centroid_box;
 
 //-------------------------------------------------------------------------

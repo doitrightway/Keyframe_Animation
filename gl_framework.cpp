@@ -12,6 +12,8 @@ extern csX75::HNode* box1,* box2,*node1_torso, *node2_neck, *node3_head,
 * man10_rightmthigh,* man11_rightfoot,* man12_mtummy,* man13_mskirt;
 char degree='a';
 int person=0;
+extern bool mylight1;
+extern bool mylight2;
 namespace csX75
 {
   //! Initialize GL State
@@ -47,6 +49,12 @@ namespace csX75
     //!Close the window if the ESC key was pressed
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
       glfwSetWindowShouldClose(window, GL_TRUE);
+    else if(key == GLFW_KEY_F1){
+      mylight1=!mylight1;
+    }
+    else if(key == GLFW_KEY_F2){
+      mylight2=!mylight2;
+    }
     else if (key == GLFW_KEY_1){
       if(person==0){
       	curr_node = node1_torso;
