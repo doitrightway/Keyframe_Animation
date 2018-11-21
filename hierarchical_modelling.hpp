@@ -131,6 +131,8 @@ long last_time=0;
 long fps_time=0.001;
 std::ifstream key_file;
 glm::vec3 cam_pos;
+csX75::state prev_state, fut_state;
+int num_frames=5;
 
 //-------------------------------------------------------------------------
 

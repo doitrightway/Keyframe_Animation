@@ -14,7 +14,7 @@ extern csX75::HNode* box1,* box2,*node1_torso, *node2_neck, *node3_head,
 * man6_rightarmu,* man7_rightarml,* man8_leftmthigh,* man9_leftfoot,
 * man10_rightmthigh,* man11_rightfoot,* man12_mtummy,* man13_mskirt;
 
-char degree='a';
+char degree='x';
 int person=0;
 
 
@@ -123,24 +123,6 @@ namespace csX75
     }
     else if (key == GLFW_KEY_3){
       if(person==0){
-      	curr_node = node3_head;	
-      }
-      else{
-      	curr_node=man3_mhead;
-      }
-      degree='a';
-    }
-    else if (key == GLFW_KEY_4){
-      if(person==0){
-      	curr_node = node4_leftarmu;
-      }
-      else{
-      	curr_node=man4_leftarmu;
-      }
-      degree='a';
-    }
-    else if (key == GLFW_KEY_5){
-      if(person==0){
       	curr_node = node5_leftarml; 
       }
       else{
@@ -148,16 +130,8 @@ namespace csX75
       }
       degree='z';
     }
-    else if (key == GLFW_KEY_6){
-      if(person==0){
-      	curr_node = node6_rightarmu; 
-      }
-      else{
-      	curr_node=man6_rightarmu;
-      }
-      degree='a';
-    }
-    else if (key == GLFW_KEY_7){
+    
+    else if (key == GLFW_KEY_4){
       if(person==0){
       	curr_node = node7_rightarml;
       }
@@ -166,7 +140,7 @@ namespace csX75
       }
       degree='z';
     }
-    else if (key == GLFW_KEY_8){
+    else if (key == GLFW_KEY_5){
       if(person==0){
       	curr_node = node8_leftthigh;
       }
@@ -175,35 +149,13 @@ namespace csX75
       }
       degree='a';
     }
-    else if (key == GLFW_KEY_9){
-      if(person==0){
-      	curr_node = node9_leftfoot;
-      }
-      else{
-      	curr_node=man9_leftfoot;
-      }
-      degree='x';
-    }
-    else if (key == GLFW_KEY_0){
+    else if (key == GLFW_KEY_6){
       if(person==0){
       	curr_node = node10_rightthigh;
       }
       else{
       	curr_node=man10_rightmthigh;
       }
-      degree='a';
-    }
-    else if (key == GLFW_KEY_EQUAL){
-      if(person==0){
-      	curr_node = node11_rightfoot;
-      }
-      else{
-      	curr_node=man11_rightfoot;
-      }
-      degree='x';
-    }
-    else if (key == GLFW_KEY_B){
-      curr_node = center;
       degree='a';
     }
     else if (key == GLFW_KEY_L){
@@ -283,6 +235,7 @@ namespace csX75
     	Save_Frame();
     }
     else if (key == GLFW_KEY_M && action==GLFW_PRESS && start==0){
+    	std::cout<<"starting player"<<std::endl;
     	start=3;
     }
 
@@ -307,13 +260,19 @@ namespace csX75
   	node5_leftarml->get_rotation(a->woman.leftlowerarm);
   	node7_rightarml->get_rotation(a->woman.rightlowerarm);
   	node9_leftfoot->get_rotation(a->woman.leftlowerleg);
-  	node11_rightfoot->get_rotation(a->woman.rightlowerleg);
 
+  	box2->get_rotation(a->box_lid);
 
   	std::ofstream f;
   	f.open("keyframes.txt",std::ios::app | std::ios::binary);
   	f.write((char*)a,sizeof(*a));
   	f.close();
+  	// std::ifstream f1;
+  	// f1.open("keyframes.txt",std::ios::in | std::ios::binary);
+  	// std::cout<<a->man.torso[0]<<" "<<a->light1<<" ";
+  	// f1.read((char*)a,sizeof(*a));
+  	// std::cout<<a->man.torso[0]<<" "<<a->light1<<" ";
+  	// f1.close();
   	delete a;
   }
 

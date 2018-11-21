@@ -64,6 +64,7 @@ namespace csX75	 {
 		void dec_ry();
 		void dec_rz();
 		void get_rotation(GLfloat [3]);
+		void set_rotation(GLfloat [3]);
 	};
 
 	glm::mat4* multiply_stack(std::vector <glm::mat4> );
