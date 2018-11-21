@@ -36,6 +36,11 @@ GLfloat c_xpos = 0, c_ypos = 0, c_zpos = 2.0;
 GLfloat c_up_x = 0.0, c_up_y = 1.0, c_up_z = 0.0;
 GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
 
+// Coordinates of box
+const glm::vec4 c_box=glm::vec4(4,4,4,1);
+const glm::vec4 c_box_look=glm::vec4(0,0,0,1);
+const glm::vec4 c_door=glm::vec4(-4,-4,-4,1);
+
 //Running variable to toggle culling on/off
 bool enable_culling=true;
 //Running variable to toggle wireframe/solid modelling
@@ -43,7 +48,7 @@ bool solid=true;
 //Enable/Disable perspective view
 bool enable_perspective=false;
 //Shader program attribs
-GLuint vPosition,vColor,texCoord;
+GLuint vPosition,vColor,texCoord, vNormal;
 GLuint vid;
 
 // //global matrix stack for hierarchical modelling
@@ -99,7 +104,9 @@ csX75::HNode* box2;
 // csX75::HNode* centroid_box;
 
 csX75::HNode* display_points[100];
-int number=0;
+int number=0,start=0;
+double counter=0;
+double delta_t=0.02;
 glm::vec3 control_points[100];
 //-------------------------------------------------------------------------
 

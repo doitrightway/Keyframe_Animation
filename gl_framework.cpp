@@ -15,9 +15,10 @@ extern csX75::HNode* box1,* box2,*node1_torso, *node2_neck, *node3_head,
 char degree='a';
 int person=0;
 
+extern glm::mat4 projection_matrix, uModelViewMatrix;
 extern csX75::HNode* display_points[100];
 extern glm::mat3 ModelViewMatrix;
-extern int number;
+extern int number,start;
 extern glm::vec3 control_points[100];
 
 namespace csX75
@@ -53,7 +54,6 @@ namespace csX75
 
     double xpos, ypos, zpos;
     glfwGetCursorPos(window, &xpos, &ypos);
-    glReadPixels(xpos, ypos, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zpos);
 
     switch(button)
     {
@@ -61,24 +61,18 @@ namespace csX75
         if (action == GLFW_PRESS)
         {
            // std::cout<<xpos<<","<<ypos<<" ";
-
-           // glm::vec3 result = glm::vec3((float)xpos/512*2-1,(float)ypos/512*2-1,0.4)*ModelViewMatrix;
-           // control_points[number]=result;
-           // ellipsoid sp(10,10,0.1,0.1,0.1,glm::vec4(0.2,0.3,0.4,1));
-        	glm::mat4 m_projection = glm::perspective(glm::radians(45.0f), (float)(1024/768), 0.1f, 1000.0f);
-
-            glm::vec3 win(xpos,512 - 1 - ypos, zpos);
-            glm::vec4 viewport(0.0f,0.0f,(float)512, (float)512);
-            glm::vec3 world = glm::unProject(win, mesh.getView() * mesh.getTransform(),m_projection,viewport);
-
-            std::cout << "screen " << xpos << " " << ypos << " " << zpos << std::endl;
-            std::cout << "world " << world.x << " " << world.y << " " << world.z << std::endl;
-           display_points[number]=new csX75::HNode(center,sp.siz,sp.positions,sp.colors,sp.id,
-           	sp.retsiz(),sp.retsiz(),sp.retsiz()/4);
-           display_points[number]->change_parameters(world[0],world[1],world[2],0,0,0);
-           // std::cout<<result[0]<<","<<-result[1]<<","<<-result[2]<<" ";
-           number++;
-
+        	xpos=xpos+0.5f;
+        	ypos=ypos+0.5f;
+            // std::cout<<xpos<<","<<ypos<<" ";
+    		glReadPixels(xpos, 512-1-ypos, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zpos);
+            // std::cout<<xpos<<","<<ypos<<","<<zpos<<" ";
+            glm::vec3 result= glm::vec3((float)xpos/512*2-1,(float)(512-1-ypos)/512*2-1,(float)zpos/512*2-1)*ModelViewMatrix;
+            control_points[number]=result;
+            ellipsoid sp(10,10,0.06,0.06,0.06,glm::vec4(0.9,0.3,0.4,1));
+        	display_points[number]=new csX75::HNode(center,sp.siz,sp.positions,sp.colors,sp.normals);
+            display_points[number]->change_parameters(result[0],result[1],result[2],0,0,0);
+            std::cout<<result[0]<<","<<result[1]<<","<<result[2]<<" ";
+            number++;
         }
           break;
       default:
@@ -265,6 +259,9 @@ namespace csX75
     }
     else if (key == GLFW_KEY_E){
       c_zrot += 1.0;   
+    }
+    else if (key == GLFW_KEY_O && action == GLFW_PRESS && number>0 && start==0){
+    	start=1;
     }
   }
 

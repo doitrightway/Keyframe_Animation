@@ -1,6 +1,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "glm/vec2.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include <iostream>
 #include <cmath>
 
@@ -11,12 +12,16 @@ class rectangle
 		glm::vec4* positions;
 		glm::vec4* colors;
 		glm::vec2* tex_coords;
+
+		glm::vec3* normals;
+
 		int* id;
 		rectangle(int scale, int iden, glm::vec4 col)
 		{
 			positions=new glm::vec4[6];
 			colors= new glm::vec4[6];
 			tex_coords=new glm::vec2[6];
+			normals= new glm::vec3[6];
 			id= new int[6];
 			positions[0]=glm::vec4(0.0,0.0,0.0, 1.0);
 			positions[1]=glm::vec4(scale,0.0,0.0, 1.0);
@@ -30,8 +35,10 @@ class rectangle
 			tex_coords[3]=glm::vec2(0.0,0.0);
 			tex_coords[4]=glm::vec2(0.0,1.0);
 			tex_coords[5]=glm::vec2(1.0,1.0);
+
 			for(int i=0;i<6;i++)
 			{
+				normals[i]=glm::vec3(0.0,0.0,-1.0);
 				id[i]=iden;
 				colors[i]=col;
 			}
@@ -55,6 +62,10 @@ public:
 	uint siz;
 	glm::vec4* positions;
 	glm::vec4* colors;
+
+	glm::vec3* normals;
+	glm::vec3* face_normals;
+
 	int* id;
 	glm::vec2* tex_coords;
 	glm::vec2* t_coords;
@@ -71,6 +82,10 @@ public:
 		col=new glm::vec4[8];
 		positions=new glm::vec4[36];
 		colors=new glm::vec4[36];
+
+		face_normals=new glm::vec3[6];
+		normals=new glm::vec3[36];
+
 		tex_coords=new glm::vec2[36];
 		this->id = new int[36];
 		t_coords=new glm::vec2[4];
@@ -107,6 +122,20 @@ public:
 		t_coords[1]=glm::vec2( 0.0, 1.0);
 		t_coords[2]=glm::vec2( 1.0, 0.0);
 		t_coords[3]=glm::vec2( 1.0, 1.0);
+		face_normals[0]=glm::vec3(0.0,-1.0,0.0);
+		face_normals[1]=glm::vec3(1.0,0.0,0.0);
+		face_normals[2]=glm::vec3(-1.0,0.0,0.0);
+		face_normals[3]=glm::vec3(0.0,0.0,-1.0);
+		face_normals[4]=glm::vec3(0.0,0.0,1.0);
+		face_normals[5]=glm::vec3(0.0,1.0,0.0);
+
+		for(int i=0;i<6;i++)
+		{
+			for(int j=i*6;j<(i+1)*6;j++)
+			{
+				normals[j]=face_normals[i];
+			}
+		}
 
 		for(int i=0;i<8;i++)
 		{
@@ -145,6 +174,10 @@ public:
 	uint siz;
 	glm::vec4* positions;
 	glm::vec4* colors;
+
+	glm::vec3* normals;
+	glm::vec3* face_normals;
+
 	glm::vec4 mycol[5];
 	int* id;
 	int iden;
@@ -162,6 +195,11 @@ public:
 		positions=new glm::vec4[30];
 		colors=new glm::vec4[30];
 		tex_coords=new glm::vec2[30];
+
+		face_normals=new glm::vec3[5];
+		normals=new glm::vec3[30];
+
+
 		this->id = new int[30];
 		t_coords=new glm::vec2[4];
 		for(int i=0;i<5;i++)
@@ -184,6 +222,10 @@ public:
 		positions=new glm::vec4[30];
 		colors=new glm::vec4[30];
 		tex_coords=new glm::vec2[30];
+
+		face_normals=new glm::vec3[5];
+		normals=new glm::vec3[30];
+
 		this->id = new int[30];
 		t_coords=new glm::vec2[4];
 		for(int i=0;i<5;i++)
@@ -224,6 +266,19 @@ public:
 		t_coords[1]=glm::vec2( 0.0, 1.0);
 		t_coords[2]=glm::vec2( 1.0, 0.0);
 		t_coords[3]=glm::vec2( 1.0, 1.0);
+		face_normals[0]=glm::vec3(0.0,-1.0,0.0);
+		face_normals[1]=glm::vec3(1.0,0.0,0.0);
+		face_normals[2]=glm::vec3(-1.0,0.0,0.0);
+		face_normals[3]=glm::vec3(0.0,0.0,-1.0);
+		face_normals[4]=glm::vec3(0.0,0.0,1.0);
+
+		for(int i=0;i<5;i++)
+		{
+			for(int j=i*6;j<(i+1)*6;j++)
+			{
+				normals[j]=face_normals[i];
+			}
+		}
 	}
 
 	void gen()
@@ -256,6 +311,10 @@ public:
 	glm::vec4* pos;
 	glm::vec4* col;
 	int idx;
+
+	glm::vec3* normals;
+	glm::vec3* face_normals;
+
 	glm::vec4* positions;
 	glm::vec4 mycol;
 	glm::vec4* colors;
@@ -284,6 +343,10 @@ public:
 		colors=new glm::vec4[siz];
 		t_coords=new glm::vec2[points];
 		tex_coords=new glm::vec2[siz];
+
+		face_normals=new glm::vec3[points];
+		normals= new glm::vec3[siz];
+
 		this->id=new int[siz];
 		initcoord();
 		gen();
@@ -307,6 +370,10 @@ public:
 		colors=new glm::vec4[siz];
 		t_coords=new glm::vec2[points];
 		tex_coords=new glm::vec2[siz];
+
+		face_normals=new glm::vec3[points];
+		normals= new glm::vec3[siz];
+
 		this->id=new int[siz];
 		initcoord();
 		gen();
@@ -330,6 +397,10 @@ public:
 		t_coords=new glm::vec2[points];
 		tex_coords=new glm::vec2[siz];
 		this->iden=1;
+
+		face_normals=new glm::vec3[points];
+		normals= new glm::vec3[siz];
+
 		this->id=new int[siz];
 		initcoord();
 		gen();
@@ -353,6 +424,10 @@ public:
 		t_coords=new glm::vec2[points];
 		tex_coords=new glm::vec2[siz];
 		this->iden=iden;
+
+		face_normals=new glm::vec3[points];
+		normals= new glm::vec3[siz];
+
 		this->id=new int[siz];
 		initcoord();
 		gen();
@@ -365,12 +440,18 @@ public:
 
 	void quad(int a, int b, int c, int d)
 	{
-		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
-		colors[idx] = col[b]; positions[idx] = pos[b]; tex_coords[idx]=t_coords[b]; id[idx]=iden; idx++;
-		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
-		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
-		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
-		colors[idx] = col[d]; positions[idx] = pos[d]; tex_coords[idx]=t_coords[d]; id[idx]=iden; idx++;
+		colors[idx] = col[a]; positions[idx] = pos[a]; normals[idx]=face_normals[a];
+		tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
+		colors[idx] = col[b]; positions[idx] = pos[b]; normals[idx]=face_normals[b];
+		tex_coords[idx]=t_coords[b]; id[idx]=iden; idx++;
+		colors[idx] = col[c]; positions[idx] = pos[c]; normals[idx]=face_normals[c];
+		tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
+		colors[idx] = col[a]; positions[idx] = pos[a]; normals[idx]=face_normals[a];
+		tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
+		colors[idx] = col[c]; positions[idx] = pos[c]; normals[idx]=face_normals[c];
+		tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
+		colors[idx] = col[d]; positions[idx] = pos[d]; normals[idx]=face_normals[d];
+		tex_coords[idx]=t_coords[d]; id[idx]=iden; idx++;
 	}
 
 	void initcoord(){
@@ -383,6 +464,11 @@ public:
 					t1*b,
 					sqrt(1-t1*t1)*cos(2*3.14*t2)*c,
 					1.0);
+
+				face_normals[counter]= glm::normalize(glm::vec3(sqrt(1-t1*t1)*sin(2*3.14*t2)/a,
+					t1/b,
+					sqrt(1-t1*t1)*cos(2*3.14*t2)/c));
+
 				t_coords[counter]=glm::vec2((float)j/base,(float)i/(t*height));
 				if(t!=2 && i==height-1){
 					col[counter]=glm::vec4(0,0,0,1.0);
@@ -437,6 +523,9 @@ public:
 	glm::vec4 mycol;
 	int* id;
 	int iden;
+
+	glm::vec3* normals;
+
 	glm::vec2* tex_coords;
 	glm::vec2* t_coords;
 	
@@ -456,6 +545,9 @@ public:
 		positions=new glm::vec4[siz];
 		colors=new glm::vec4[siz];
 		tex_coords=new glm::vec2[siz];
+
+		normals=new glm::vec3[siz];
+
 		t_coords=new glm::vec2[points];
 		this->id=new int[siz];
 		this->iden=1;
@@ -483,6 +575,10 @@ public:
 		colors=new glm::vec4[siz];
 		tex_coords=new glm::vec2[siz];
 		t_coords=new glm::vec2[points];
+
+		normals=new glm::vec3[siz];
+
+
 		this->id=new int[siz];
 		this->iden=iden;
 		initcoord();
@@ -500,12 +596,18 @@ public:
 
 	void quad(int a, int b, int c, int d)
 	{
-		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx] = t_coords[a]; id[idx]=iden; idx++;
-		colors[idx] = col[b]; positions[idx] = pos[b]; tex_coords[idx] = t_coords[b]; id[idx]=iden; idx++;
-		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx] = t_coords[c]; id[idx]=iden; idx++;
-		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx] = t_coords[a]; id[idx]=iden; idx++;
-		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx] = t_coords[c]; id[idx]=iden; idx++;
-		colors[idx] = col[d]; positions[idx] = pos[d]; tex_coords[idx] = t_coords[d]; id[idx]=iden; idx++;
+
+		int mytemp=idx;
+		for(int i=mytemp;i<mytemp+6;i++)
+		{
+			normals[i]= glm::normalize(glm::cross(glm::vec3(pos[b]-pos[a]),glm::vec3(pos[c]-pos[b])));
+		}	
+		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
+		colors[idx] = col[b]; positions[idx] = pos[b]; tex_coords[idx]=t_coords[b]; id[idx]=iden; idx++;
+		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
+		colors[idx] = col[a]; positions[idx] = pos[a]; tex_coords[idx]=t_coords[a]; id[idx]=iden; idx++;
+		colors[idx] = col[c]; positions[idx] = pos[c]; tex_coords[idx]=t_coords[c]; id[idx]=iden; idx++;
+		colors[idx] = col[d]; positions[idx] = pos[d]; tex_coords[idx]=t_coords[d]; id[idx]=iden; idx++;
 	}
 
 	void initcoord(void)

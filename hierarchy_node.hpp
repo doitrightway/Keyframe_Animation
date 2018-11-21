@@ -27,6 +27,7 @@ namespace csX75	 {
 		std::size_t vertex_buffer_size;
 		std::size_t color_buffer_size;
 		std::size_t texture_buffer_size;
+		std::size_t normal_buffer_size;
 
 		GLuint num_vertices;
 		GLuint vao,vbo;
@@ -46,14 +47,10 @@ namespace csX75	 {
 	  public:
 	  	glm::mat4 rotation;
 		glm::mat4 translation;
-		HNode (HNode*, GLuint, glm::vec4*,  glm::vec4*,int*, std::size_t, std::size_t, std::size_t);
+		HNode (HNode*, GLuint, glm::vec4*,  glm::vec4*, glm::vec3*);
 		HNode (HNode*, GLuint);
-		// HNode(HNode*, GLuint, glm::vec4*, glm::vec4* , 
-		// glm::vec2*, int*, std::size_t, 
-		// std::size_t, std::size_t, std::size_t);
 		HNode(HNode*, GLuint, glm::vec4*, glm::vec4* , 
-		glm::vec2*, int*, std::size_t, 
-		std::size_t, std::size_t, std::size_t,std::string,int,int);
+		glm::vec2*,glm::vec3*,std::string,int,int);
 
 		void add_child(HNode*);
 		void render();
