@@ -41,7 +41,7 @@ GLfloat c_xrot=0.0,c_yrot=0.0,c_zrot=0.0;
 // Coordinates of box
 const glm::vec4 c_box=glm::vec4(0,0,0,1);
 const glm::vec4 c_box_look=glm::vec4(-2,3,0,1);
-const glm::vec4 c_door=glm::vec4(-8,-8,-8,1);
+const glm::vec4 c_door=glm::vec4(-8,-8,8,1);
 
 //Running variable to toggle culling on/off
 bool enable_culling=true;
@@ -59,7 +59,13 @@ std::vector<glm::mat4> matrixStack;
 
 csX75::HNode* curr_node;
 csX75::HNode* center;
-csX75::HNode* front;
+// csX75::HNode* front;
+csX75::HNode* front_abovedoor;
+csX75::HNode* front_leftdoor;
+csX75::HNode* front_door;
+csX75::HNode* front_rightdoor;
+
+
 csX75::HNode* back;
 csX75::HNode* left;
 csX75::HNode* right;

@@ -39,8 +39,8 @@ GLuint uModelViewMatrix;
 
 int filenumber=0;
 
-bool mylight1;
-bool mylight2;
+bool mylight1=0;
+bool mylight2=1;
 
 void createman(float,float);
 glm::vec3 get_Bezier(double);
@@ -91,12 +91,32 @@ void initBuffersGL(void)
   int scale=20;
 
   int shift=scale/2;
-  rectangle rect(scale,0,glm::vec4(1,0,1,1));
+  rectangle rect(scale,scale,0,glm::vec4(1,0,1,1));
+  rectangle abovedoor(20,5,0,glm::vec4(1,0,1,1));
+  rectangle leftdoor(2,15,0,glm::vec4(1,0,1,1));
+  rectangle door(4,15,0,glm::vec4(1,0,1,1));
+  rectangle rightdoor(14,15,0,glm::vec4(1,0,1,1));
 
-  front = new csX75::HNode(center,6,rect.positions,
-    rect.colors,rect.tex_coords,rect.normals,"images/walldoor.bmp",256,148);
+  front_abovedoor = new csX75::HNode(center,6,abovedoor.positions,
+    abovedoor.colors,abovedoor.tex_coords,abovedoor.normals,"images/table_top.bmp",256,162);
 
-  front->change_parameters(-shift,-shift,shift,0,0,0);
+  front_abovedoor->change_parameters(-shift,5,shift,0,0,0);
+
+  front_leftdoor = new csX75::HNode(center,6,leftdoor.positions,
+    leftdoor.colors,leftdoor.tex_coords,leftdoor.normals,"images/table_top.bmp",256,162);
+
+  front_leftdoor->change_parameters(-shift,-shift,shift,0,0,0);
+
+  front_door = new csX75::HNode(center,6,door.positions,
+    door.colors,door.tex_coords,door.normals,"images/furniture.bmp",256,192);
+
+  front_door->change_parameters(-8,-shift,shift,0,0,0);
+
+  front_rightdoor = new csX75::HNode(center,6,rightdoor.positions,
+    rightdoor.colors,rightdoor.tex_coords,rightdoor.normals,"images/table_top.bmp",256,162);
+
+  front_rightdoor->change_parameters(-4,-shift,shift,0,0,0);
+
 
   back = new csX75::HNode(center,6,rect.positions,
     rect.colors,rect.tex_coords,rect.normals,"images/wallwin2.bmp",256,223);
@@ -465,20 +485,14 @@ void renderGL(void)
   glm::vec3 nor=glm::vec3(0.0);
 
   if(start==7){
-  	// if(bezier_line!=NULL){
-  	// 	delete bezier_line;
-  	// }
   	start=0;
-  	// std::cout<<"yiu"<<" ";
   	glm::vec4* arr=new glm::vec4[(((int)(1/delta_t)))*3];
   	glm::vec4* col=new glm::vec4[(((int)(1/delta_t)))*3];
   	glm::vec3* normal=new glm::vec3[(((int)(1/delta_t)))*3];
-  	// std::cout<<"yiu"<<" ";
   	glm::vec3 a,b;
   	a=get_Bezier(0);
   	int pr=0;
   	for(double i=delta_t;i<=1;i+=delta_t){
-  		// std::cout<<i<<","<<pr<<" ";
   		b=get_Bezier(i);
   		col[pr]=glm::vec4(1,0,0,1);
   		col[pr+1]=glm::vec4(1,0,0,1);
@@ -488,7 +502,7 @@ void renderGL(void)
   		normal[pr+2]=glm::vec3(1);
   		arr[pr]=glm::vec4(a[0],a[1],a[2],1);
   		arr[pr+1]=glm::vec4(b[0],b[1],b[2],1);
-  		arr[pr+2]=glm::vec4(a[0]+0.01,a[1]+0.01,a[2]+0.1,1);
+  		arr[pr+2]=glm::vec4(a[0]+0.1,a[1]+0.1,a[2]+0.1,1);
   		pr+=3;
   		a=b;
   	}
@@ -504,7 +518,7 @@ void renderGL(void)
     cam_pos=get_Bezier(counter);
   }
   if(start==2 && counter>=1){
-  	start=0;
+  	start=3;
   	counter=0;
   	for(int i=0;i<number;i++){
   		delete display_points[i];
@@ -654,6 +668,9 @@ void change_state(double counter){
 
 
 glm::vec3 get_Bezier(double x){
+	if(x==0)
+		return glm::vec3(c_door);
+
 	glm::vec3 res=glm::vec3(0,0,0);
 	int n=number+2;
 	double tot=pow(x,n-1);
