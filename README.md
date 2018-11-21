@@ -7,6 +7,10 @@
 | Eashan Gupta | 160050045 |
 | Ankit | 160050046 |
 
+## Enjoy video prepared by us at at:
+
+- [Video](https://youtu.be/RnY8UOf20tQ)
+
 ## To run the code:
 
 ### Compile and run:
