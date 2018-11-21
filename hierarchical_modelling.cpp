@@ -464,6 +464,40 @@ void renderGL(void)
   // //Creating the lookat and the up vectors for the camera
   glm::vec3 nor=glm::vec3(0.0);
 
+  if(start==7){
+  	// if(bezier_line!=NULL){
+  	// 	delete bezier_line;
+  	// }
+  	start=0;
+  	// std::cout<<"yiu"<<" ";
+  	glm::vec4* arr=new glm::vec4[(((int)(1/delta_t)))*3];
+  	glm::vec4* col=new glm::vec4[(((int)(1/delta_t)))*3];
+  	glm::vec3* normal=new glm::vec3[(((int)(1/delta_t)))*3];
+  	// std::cout<<"yiu"<<" ";
+  	glm::vec3 a,b;
+  	a=get_Bezier(0);
+  	int pr=0;
+  	for(double i=delta_t;i<=1;i+=delta_t){
+  		// std::cout<<i<<","<<pr<<" ";
+  		b=get_Bezier(i);
+  		col[pr]=glm::vec4(1,0,0,1);
+  		col[pr+1]=glm::vec4(1,0,0,1);
+  		col[pr+2]=glm::vec4(1,0,0,1);
+  		normal[pr]=glm::vec3(1);
+  		normal[pr+1]=glm::vec3(1);
+  		normal[pr+2]=glm::vec3(1);
+  		arr[pr]=glm::vec4(a[0],a[1],a[2],1);
+  		arr[pr+1]=glm::vec4(b[0],b[1],b[2],1);
+  		arr[pr+2]=glm::vec4(a[0]+0.01,a[1]+0.01,a[2]+0.1,1);
+  		pr+=3;
+  		a=b;
+  	}
+  	bezier_line=new csX75::HNode(center,pr,arr,col,normal);
+  	delete[] arr;
+  	delete[] col;
+  	delete[] normal;
+  }
+
   if(start==1){
     start=2;
     last_time=glfwGetTime();
@@ -487,7 +521,7 @@ void renderGL(void)
 	  	c_zpos=cam_pos[2];
 	  	last_time=tim;
 	  }
-	  nor=glm::vec3(c_box)-cam_pos;
+	  // nor=glm::vec3(c_box)-cam_pos;
   }
   if(start==3){
   	start=4;
@@ -630,8 +664,6 @@ glm::vec3 get_Bezier(double x){
 	}
 	tot=(tot/x)*(1-x)/(n-1);
 	res+=glm::vec3(c_door)*glm::vec3(tot);
-
-	std::cout<<"yo:"<<x<<" ("<<res[0]<<","<<res[1]<<","<<res[2]<<") ";
 	
 	return res;
 }

@@ -121,6 +121,7 @@ csX75::HNode* chleg24;
 csX75::HNode* smbox1;
 csX75::HNode* smbox2;
 // csX75::HNode* centroid_box;
+csX75::HNode* bezier_line;
 
 csX75::HNode* display_points[100];
 int number=0,start=0;
@@ -129,7 +130,7 @@ double delta_t=0.04;
 glm::vec3 control_points[100];
 double last_time=0;
 double fps_time=0.007;
-double fps_cam_time = 0.001;
+double fps_cam_time = 0.1;
 std::ifstream key_file;
 glm::vec3 cam_pos;
 csX75::state prev_state, fut_state;

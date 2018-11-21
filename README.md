@@ -15,22 +15,27 @@ make
 ./output
 ```
 
+### To run and allow to record animation:
+```
+./output 1
+```
+
 ## Key Mappings:
 
 | Keys | Control |
 | --- | --- |
-| ADWSQE | change camera location |
+| ADWSQE | Change Camera direction |
+| HKUJYI | Change Camera location |
 | F1 | Wall light (On/Off) |
 | F2 | Table lamp (On/Off) |
 | M | Play animation |
 | O | Camera animation on bezier curve |
 | V | Recording keyframes |
-
+| P | Change perspective |
 | L | Open lid of box |
 | Left-Right | rotate about y-axis |
 | Up-Down | rotate about x-axis |
 | PgUp-PgDown | rotate about z-axis |
-| P | Change perspective |
 | T | Change the control to other puppet |
 | 1 | Centroid of dancer |
 | 2 | neck |
@@ -41,6 +46,8 @@ make
 
 ## Notes:
 
+- When program is started, press F1 and F2 to switch the lights ON.
+- In the fshader, Phong Shading has been used.
 - The file shapes.cpp contains classes used to define various parts of the objects drawn.
 - Most of the variables defined for nodes are self-explanatory.
 
@@ -50,5 +57,6 @@ The given code is our own original implementation and we have not copied it from
 
 ## References:
 
-- [GLFW help](http://www.glfw.org/docs/latest/group__keys.html)
-- [Color schemes](http://www.tayloredmktg.com/rgb/)
+- [GLFW help](http://www.glfw.org/docs/)
+- [C++ references](http://www.cplusplus.com/)
+- [StackOverflow](https://stackoverflow.com/)
